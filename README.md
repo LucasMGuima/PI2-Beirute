@@ -12,13 +12,13 @@
 -Gameplay:  
 	O jogador terá que resolver uma serie de puzzles e enfrentar inimigos enquanto progredi através de níveis, como se estivesse em uma torre, e adquire upgrades conforme evolui no jogo.
 
--Mecânicas:  
-	-Interação com o ambiente, como temos em Goof Troop, para Super Nintendo:  
-		-Ativar mecanismos;  
-		-Empurrar objetos;  
-	-Lutar contra inimigos, como ocorre nos jogos de visão isométrica da série de jogos de The Legend of Zelda;  
-	-Itens que recuperam vida são remédios ou alimentos que aumentam sua saúde;  
-	-Sistema de power-up conforme se progredi no jogo;  
+*Mecânicas:  
+	*Interação com o ambiente, como temos em Goof Troop, para Super Nintendo:  
+		*Ativar mecanismos;  
+		*Empurrar objetos;  
+	*Lutar contra inimigos, como ocorre nos jogos de visão isométrica da série de jogos de The Legend of Zelda;  
+	*Itens que recuperam vida são remédios ou alimentos que aumentam sua saúde;  
+	*Sistema de power-up conforme se progredi no jogo;  
 
 -História:  
 	No ano de 40XX, a humanidade é atingida com uma gigantesca onda viral, mais de 80% da população mundial já foi infectada, nenhum remédio convencional surte efeito nesses individuo, devida a doença atacar sempre de maneira diferente cada um, parece até que várias doenças se uniram em uma única.  
