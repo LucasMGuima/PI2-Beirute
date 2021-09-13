@@ -6,8 +6,8 @@
 
 ###### Integrantes:  
 	Ahmed Mohamad Bakri;  
-	Kevin Almeida;  
-	Lucas da Mata.
+	Kevin de Almeida Melo Ferreira;  
+	Lucas da Mata Guimarães.
 
 
 ##### Gameplay:
