@@ -14,7 +14,24 @@ void iniciar(bool teste, const char *descricao) {
 struct jogador {
 	float x;
 	float y;
+	float velocidade;
+
+	void movimento(ALLEGRO_KEYBOARD_STATE &ks, jogador &jogador) {
+		if (al_key_down(&ks, ALLEGRO_KEY_W)) {
+			jogador.y -= jogador.velocidade;
+		}
+		if (al_key_down(&ks, ALLEGRO_KEY_S)) {
+			jogador.y += jogador.velocidade;
+		}
+		if (al_key_down(&ks, ALLEGRO_KEY_A)) {
+			jogador.x -= jogador.velocidade;
+		}
+		if (al_key_down(&ks, ALLEGRO_KEY_D)) {
+			jogador.x += jogador.velocidade;
+		}
+	};
 };
+
 
 int main()
 {
@@ -34,9 +51,10 @@ int main()
 	al_register_event_source(queue, al_get_keyboard_event_source());
 	al_register_event_source(queue, al_get_timer_event_source(timer));
 
-	struct jogador jogador;
-	jogador.x = 400;
-	jogador.y = 300;
+	jogador jogador;
+	jogador.x = 400.0;
+	jogador.y = 300.0;
+	jogador.velocidade = 4.0;
 
 	ALLEGRO_EVENT evento;
 	ALLEGRO_KEYBOARD_STATE ks;
@@ -48,19 +66,7 @@ int main()
 		switch (evento.type) {
 			case ALLEGRO_EVENT_TIMER:
 				al_get_keyboard_state(&ks);
-
-				if (al_key_down(&ks, ALLEGRO_KEY_UP)) {
-					jogador.y--;
-				}
-				if (al_key_down(&ks, ALLEGRO_KEY_DOWN)) {
-					jogador.y++;
-				}
-				if (al_key_down(&ks, ALLEGRO_KEY_LEFT)) {
-					jogador.x--;
-				}
-				if (al_key_down(&ks, ALLEGRO_KEY_RIGHT)) {
-					jogador.x++;
-				}
+				jogador.movimento(ks, jogador);
 				break;
 		}
 
@@ -68,6 +74,10 @@ int main()
 		al_draw_filled_rectangle(jogador.x, jogador.y, jogador.x + 20, jogador.y + 20, al_map_rgb(255, 0, 0));
 		al_flip_display();
 	}
+
+	al_destroy_display(tela);
+	al_destroy_event_queue(queue);
+	al_destroy_timer(timer);
 
 	return 0;
 }
