@@ -3,6 +3,8 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 
+#include "objJogador.h"
+
 using namespace std;
 
 void iniciar(bool teste, const char *descricao) {
@@ -10,28 +12,6 @@ void iniciar(bool teste, const char *descricao) {
 
 	printf("Nao foi pocivel iniciar %s\n", descricao);
 }
-
-struct jogador {
-	float x;
-	float y;
-	float velocidade;
-
-	void movimento(ALLEGRO_KEYBOARD_STATE &ks, jogador &jogador) {
-		if (al_key_down(&ks, ALLEGRO_KEY_W)) {
-			jogador.y -= jogador.velocidade;
-		}
-		if (al_key_down(&ks, ALLEGRO_KEY_S)) {
-			jogador.y += jogador.velocidade;
-		}
-		if (al_key_down(&ks, ALLEGRO_KEY_A)) {
-			jogador.x -= jogador.velocidade;
-		}
-		if (al_key_down(&ks, ALLEGRO_KEY_D)) {
-			jogador.x += jogador.velocidade;
-		}
-	};
-};
-
 
 int main()
 {
@@ -51,10 +31,7 @@ int main()
 	al_register_event_source(queue, al_get_keyboard_event_source());
 	al_register_event_source(queue, al_get_timer_event_source(timer));
 
-	jogador jogador;
-	jogador.x = 400.0;
-	jogador.y = 300.0;
-	jogador.velocidade = 4.0;
+	objJogador jogador(400.0, 300.0, 4.0);
 
 	ALLEGRO_EVENT evento;
 	ALLEGRO_KEYBOARD_STATE ks;
@@ -66,7 +43,7 @@ int main()
 		switch (evento.type) {
 			case ALLEGRO_EVENT_TIMER:
 				al_get_keyboard_state(&ks);
-				jogador.movimento(ks, jogador);
+				jogador.movimento(ks, tela);
 				break;
 		}
 
