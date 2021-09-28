@@ -7,7 +7,8 @@ class objJogador
 		float x;
 		float y;
 		float velocidade;
-		enum dir {DOWN, LEFT, RIGHT, UP};
+		enum Direction {DOWN, LEFT, RIGHT, UP};
+		int dir;
 
 		objJogador(float new_x, float new_y, float new_velocidade) {
 			x = new_x;
@@ -41,7 +42,7 @@ class objJogador
 				//x += velocidade;
 				dir = RIGHT;
 			}
-			colisao(x , y, 200, 200, al_get_bitmap_width, al_get_bitmap_height, dir, velocidade);
+			colisao(x , y, 200, 200, 32, 32, dir, velocidade);
 		}
 };
 

@@ -9,8 +9,8 @@
 
 using namespace std;
 //detecta colisao entre hitbox para que nao ocorra um "overlap" entre elas
-void collisao(float x, float y, float ex, float ey, int width, int height, int dir, float velocidade) {
-	if (x + width < ex || x > ex + width || y + height > ey || y > ey + height) {
+void colisao(float x, float y, float ex, float ey, int width, int height, int dir, float velocidade) {
+	if (x + width < ex || x > ex + width || y + height < ey || y > ey + height) {
 		//sem colisao de hitbox
 	}
 	else {
