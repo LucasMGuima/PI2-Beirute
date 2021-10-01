@@ -36,7 +36,7 @@ int main()
 	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
 	iniciar(queue, "queue");
 
-	ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60);
+	ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30);
 	iniciar(timer, "timer");
 
 	al_register_event_source(queue, al_get_keyboard_event_source());
@@ -63,6 +63,24 @@ int main()
 
 		al_clear_to_color(al_map_rgb(0, 55, 0));
 
+		if (al_key_down(&ks, ALLEGRO_KEY_W))
+		{
+			al_draw_bitmap(W, jogador.x, jogador.y, 0);
+		}
+		else if (al_key_down(&ks, ALLEGRO_KEY_D))
+		{
+			al_draw_bitmap(D, jogador.x, jogador.y, 0);
+
+		}
+		else if (al_key_down(&ks, ALLEGRO_KEY_A))
+		{
+			al_draw_bitmap(A, jogador.x, jogador.y, 0);
+
+		}
+		else
+		{
+			al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
+		}
 
 
 
