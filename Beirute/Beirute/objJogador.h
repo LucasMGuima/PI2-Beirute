@@ -9,6 +9,8 @@ class objJogador
 		float y;
 		float velocidade;
 		int dir;
+		enum Direction { DOWN, LEFT, RIGHT, UP };
+		
 
 		objJogador(float new_x, float new_y, float new_velocidade) {
 			x = new_x;
