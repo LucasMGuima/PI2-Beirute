@@ -2,10 +2,26 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
-#include <allegro5/allegro_image.h>
+#include <allegro5/allegrio_images.h>
 #include "objJogador.h"
 
 using namespace std;
+void colisao(float x, float y, float ex, float ey, int width, int height, int dir, float velocidade) {
+	if (x + width < ex || x > ex + width || y + height < ey || y > ey + height) {
+		//sem colisao de hitbox
+	}
+	else {
+		if (dir == 0)
+			y -= velocidade;
+		else if (dir == 1)
+			x += velocidade;
+		else if (dir == 2)
+			x -= velocidade;
+		else if (dir == 3)
+			y += velocidade;
+	}
+
+}
 
 
 void iniciar(bool teste, const char* descricao) {
@@ -32,6 +48,7 @@ int main()
 
 	ALLEGRO_DISPLAY* tela = al_create_display(800, 600);
 	iniciar(tela, "tela");
+
 
 	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
 	iniciar(queue, "queue");
