@@ -63,11 +63,22 @@ class objInimigo {
 					y += 4;
 				}
 				break;
-
-			case quadrado:
-				//tipo 3 de mov
-				break;
 			}
+		}
+
+		void colisao(float ex, float ey) {
+			if (x + TEMP_TAMANHO < ex || x > ex + TEMP_TAMANHO || y + TEMP_TAMANHO < ey || y > ey + TEMP_TAMANHO) {
+				//sem colisao de hitbox
+			}
+			else {
+				if (direc == 0) {
+					direc = 1;
+				}
+				else if (direc == 1) {
+					direc = 0;
+				}
+			}
+
 		}
 
 		void desenhar() {

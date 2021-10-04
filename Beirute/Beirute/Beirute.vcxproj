@@ -159,7 +159,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="objJogador.h" />
+    <ClInclude Include="objInimigo.h" />
+    <ClInclude Include="enum.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
