@@ -2,5 +2,7 @@
 
 enum tipoMovInimi {
 	cimaBaixo,
-	esqDir
+	esqDir,
+	triangulo,
+	quadrado
 };
