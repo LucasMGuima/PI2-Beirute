@@ -147,66 +147,96 @@ class objInimigo {
 				break;
 			
 			case quadrado:
+				if (direc == 1) {
+					velocida = velocida;
+				}
+				else if (direc == 0) {
+					velocida = -velocida;
+				}
+
 				switch (mov_passo[passo_atual])
 				{
-				case 1:
-					//seta um novo alvo de movimento
-					if (target_x == -1) target_x = x + mov_dist;
-					//se move até o alvo
-					if (x < target_x) {
-						x += velocida;
-					}
-					//checa se chego no alvo
-					if (x == target_x) {
-						passo_atual += 1;
-						target_x = -1;
-					}
-					break;
-				
-				case 2:
-					//seta um novo alvo de movimento
-					if (target_y == -1) target_y = y + mov_dist;
-					//se move até o alvo
-					if (y < target_y) {
-						y += velocida;
-					}
-					//checa se chego no alvo
-					if (y == target_y) {
-						passo_atual += 1;
-						target_y = -1;
-					}
-					break;
+					case 1:
+						//seta um novo alvo de movimento
+						if (target_x == -1) {
+							if(direc == 1) target_x = x + mov_dist;
+							else if (direc == 0) target_x = x - mov_dist;
+						}
+						//se move até o alvo
+						if (x < target_x && direc == 1) {
+							x += velocida;
+						}
+						if (x > target_x && direc == 0) {
+							x += velocida;
+						}
+						//checa se chego no alvo
+						if (x == target_x) {
+							passo_atual += 1;
+							target_x = -1;
+						}
+						break;
 
-				case 3:
-					//seta um novo alvo de movimento
-					if (target_x == -1) target_x = x - mov_dist;
-					//se move até o alvo
-					if (x > target_x) {
-						x -= velocida;
-					}
-					//checa se chego no alvo
-					if (x == target_x) {
-						passo_atual += 1;
-						target_x = -1;
-					}
-					break;
-				
-				case 4:
-					//seta um novo alvo de movimento
-					if (target_y == -1) target_y = y - mov_dist;
-					//se move até o alvo
-					if (y > target_y) {
-						y -= velocida;
-					}
-					//checa se chego no alvo
-					if (y == target_y) {
-						passo_atual = 0;
-						target_y = -1;
-					}
-					break;
+					case 2:
+						//seta um novo alvo de movimento
+						if (target_y == -1) {
+							if(direc == 1) target_y = y + mov_dist;
+							else if (direc == 0) target_y = y - mov_dist;
+						}
+						//se move até o alvo
+						if (y < target_y && direc == 1) {
+							y += velocida;
+						}
+						if (y > target_y && direc == 0) {
+							y += velocida;
+						}
+						//checa se chego no alvo
+						if (y == target_y) {
+							passo_atual += 1;
+							target_y = -1;
+						}
+						break;
 
+					case 3:
+						//seta um novo alvo de movimento
+						if (target_x == -1) {
+							if(direc == 1) target_x = x - mov_dist;
+							else if (direc == 0) target_x = x + mov_dist;
+						}
+						//se move até o alvo
+						if (x > target_x && direc == 1) {
+							x -= velocida;
+						}
+						if (x < target_x && direc == 0) {
+							x -= velocida;
+						}
+						//checa se chego no alvo
+						if (x == target_x) {
+							passo_atual += 1;
+							target_x = -1;
+						}
+						break;
+
+					case 4:
+						//seta um novo alvo de movimento
+						if (target_y == -1) {
+							if(direc == 1) target_y = y - mov_dist;
+							else if (direc == 0) target_y = y + mov_dist;
+						}
+						//se move até o alvo
+						if (y > target_y && direc == 1) {
+							y -= velocida;
+						}
+						if (y < target_y && direc == 0) {
+							y -= velocida;
+						}
+						//checa se chego no alvo
+						if (y == target_y) {
+							passo_atual = 0;
+							target_y = -1;
+						}
+						break;
 				}
-				break;
+
 			}
 
 		}

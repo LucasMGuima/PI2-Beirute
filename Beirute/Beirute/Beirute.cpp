@@ -45,9 +45,10 @@ int main()
 	objInimigo inimigo01(400.0, 300.0, esqDir, 3.0, 0);
 	objInimigo inimigo02(200.0, 300.0, cimaBaixo, 2.0, 0);
 	objInimigo inimigo03(200.0, 100.0, cimaBaixo, 2.0, 0);
-
 	objInimigo inimigo04(300.0, 500.0, triangulo, 2.5, 200);
-	objInimigo inimigo05(200.0, 100.0, quadrado, 2.5, 200);
+	objInimigo inimigo05(500.0, 100.0, quadrado, 2.5, 200);
+
+	objInimigo inimigos[] = {inimigo01, inimigo02, inimigo03, inimigo04, inimigo05};
 
 	bloco b1;
 	b1.x = 100;
@@ -57,31 +58,31 @@ int main()
 	b2.x = 600;
 	b2.y = 300;
 
+	bloco blocos[] = { b1, b2};
+
+	//tamanho dos arrays
+	int size = (sizeof inimigos) / (sizeof *inimigos);
+	int size_bloc = (sizeof blocos) / (sizeof *blocos);
+
 	al_start_timer(timer);
 	while (true) {
 		al_wait_for_event(queue, &event);
 
 		switch (event.type) {
 			case ALLEGRO_EVENT_TIMER:
-
-				/*
-				inimigo01.colisao(b1.x, b1.y);
-				inimigo01.colisao(b2.x, b2.y);
-				inimigo01.colisao(inimigo03.x, inimigo03.y);
-				inimigo01.colisao(inimigo02.x, inimigo02.y);
-				inimigo01.mover(tela);
-
-				inimigo02.colisao(inimigo01.x, inimigo01.y);
-				inimigo02.colisao(inimigo03.x, inimigo03.y);
-				inimigo02.mover(tela);
-
-				inimigo03.colisao(inimigo01.x, inimigo01.y);
-				inimigo03.colisao(inimigo02.x, inimigo02.y);
-				inimigo03.mover(tela);
-				*/
-
-				inimigo04.mover(tela);
-				inimigo05.mover(tela);
+				for (int i = 0; i < size; i++) {
+					//checa por colisão com solidos
+					for (int j = 0; j < size_bloc; j++) {
+						inimigos[i].colisao(blocos[j].x, blocos[j].y);
+					}
+					//checa por colisão com outros inimigos
+					for (int j = 0; j < size; j++) {
+						if (j != i) {
+							inimigos[i].colisao(inimigos[j].x, inimigos[j].y);
+						}
+					}
+					inimigos[i].mover(tela);
+				}
 				break;
 		
 			case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -92,13 +93,13 @@ int main()
 		if (done) break;
 
 		al_clear_to_color(al_map_rgb(0, 0, 0));
-		/*
-		inimigo01.desenhar(255, 0, 0);
-		inimigo02.desenhar(0, 255, 0);
-		inimigo03.desenhar(0, 0, 255);
-		*/
-		inimigo04.desenhar(0, 255, 255);
-		inimigo05.desenhar(255, 255, 0);
+		//desenha todos os inimigos na tela
+		for (int i = 0; i < size; i++) {
+			int r = rand() % 255;
+			int g = rand() % 255;
+			int b = rand() % 255;
+			inimigos[i].desenhar(r,g,b);
+		}
 		b1.desenhar();
 		b2.desenhar();
 
