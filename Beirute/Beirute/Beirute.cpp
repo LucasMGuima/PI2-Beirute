@@ -46,9 +46,9 @@ int main()
 	objInimigo inimigo02(200.0, 300.0, cimaBaixo, 2.0, 0);
 	objInimigo inimigo03(200.0, 100.0, cimaBaixo, 2.0, 0);
 	objInimigo inimigo04(300.0, 500.0, triangulo, 2.5, 200);
-	objInimigo inimigo05(500.0, 100.0, quadrado, 2.5, 200);
+	objInimigo inimigo05(300.0, 100.0, quadrado, 2.5, 200);
 
-	objInimigo inimigos[] = {inimigo01, inimigo02, inimigo03, inimigo04, inimigo05};
+	objInimigo inimigos[] = {inimigo01, inimigo02, inimigo03};
 
 	bloco b1;
 	b1.x = 100;
@@ -58,7 +58,11 @@ int main()
 	b2.x = 600;
 	b2.y = 300;
 
-	bloco blocos[] = { b1, b2};
+	bloco b3;
+	b3.x = 300;
+	b3.y = 300;
+
+	bloco blocos[] = {b1, b2, b3};
 
 	//tamanho dos arrays
 	int size = (sizeof inimigos) / (sizeof *inimigos);
@@ -102,6 +106,7 @@ int main()
 		}
 		b1.desenhar();
 		b2.desenhar();
+		b3.desenhar();
 
 		al_flip_display();
 	}

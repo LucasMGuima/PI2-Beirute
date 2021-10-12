@@ -15,6 +15,7 @@ class objInimigo {
 		int passo_atual = 0;
 		int mov_dist = 0;
 
+		int last_pos[2] = {-1, -1};
 	public:
 		double x, y, velocida;
 		int tipoCaminho;
@@ -147,31 +148,31 @@ class objInimigo {
 				break;
 			
 			case quadrado:
-				if (direc == 1) {
-					velocida = velocida;
-				}
-				else if (direc == 0) {
-					velocida = -velocida;
-				}
-
 				switch (mov_passo[passo_atual])
 				{
 					case 1:
 						//seta um novo alvo de movimento
 						if (target_x == -1) {
-							if(direc == 1) target_x = x + mov_dist;
-							else if (direc == 0) target_x = x - mov_dist;
+							if (direc == 1) {
+								target_x = x + mov_dist;
+							}
+							else if (direc == 0) {
+								target_x = x - mov_dist;
+							}
 						}
 						//se move até o alvo
 						if (x < target_x && direc == 1) {
 							x += velocida;
 						}
-						if (x > target_x && direc == 0) {
-							x += velocida;
+						if (x > last_pos[0] && direc == 0) {
+							x -= velocida;
 						}
 						//checa se chego no alvo
-						if (x == target_x) {
-							passo_atual += 1;
+						if (x == target_x || x == last_pos[0]) {
+							if (x == target_x) passo_atual += 1;
+							else if (x == last_pos[0]) passo_atual ;
+							last_pos[0] = -1;
+							last_pos[1] = y;
 							target_x = -1;
 						}
 						break;
@@ -186,12 +187,15 @@ class objInimigo {
 						if (y < target_y && direc == 1) {
 							y += velocida;
 						}
-						if (y > target_y && direc == 0) {
-							y += velocida;
+						if (y > last_pos[1] && direc == 0) {
+							y -= velocida;
 						}
 						//checa se chego no alvo
-						if (y == target_y) {
-							passo_atual += 1;
+						if (y == target_y || y == last_pos[1]) {
+							if (y == target_y) passo_atual += 1;
+							else if (y == last_pos[1]) passo_atual -= 1;
+							last_pos[0] = x;
+							last_pos[1] = -1;
 							target_y = -1;
 						}
 						break;
@@ -206,12 +210,15 @@ class objInimigo {
 						if (x > target_x && direc == 1) {
 							x -= velocida;
 						}
-						if (x < target_x && direc == 0) {
-							x -= velocida;
+						if (x < last_pos[0] && direc == 0) {
+							x += velocida;
 						}
 						//checa se chego no alvo
-						if (x == target_x) {
-							passo_atual += 1;
+						if (x == target_x || x == last_pos[0]) {
+							if(x == target_x) passo_atual += 1;
+							else if (x == last_pos[0]) passo_atual -= 1;
+							last_pos[0] = -1;
+							last_pos[1] = y;
 							target_x = -1;
 						}
 						break;
@@ -226,17 +233,20 @@ class objInimigo {
 						if (y > target_y && direc == 1) {
 							y -= velocida;
 						}
-						if (y < target_y && direc == 0) {
-							y -= velocida;
+						if (y < last_pos[1] && direc == 0) {
+							y += velocida;
 						}
 						//checa se chego no alvo
-						if (y == target_y) {
-							passo_atual = 0;
+						if (y == target_y || y == last_pos[1]) {
+							if (y == target_y) passo_atual = 0;
+							else if (y == last_pos[1]) passo_atual -= 1;
+							last_pos[0] = x;
+							last_pos[1] = -1;
 							target_y = -1;
 						}
 						break;
 				}
-
+				printf("last_pos[%d, %d] | direc[%d] | passo_atual[%d] \n", last_pos[0], last_pos[1], direc, passo_atual);
 			}
 
 		}
