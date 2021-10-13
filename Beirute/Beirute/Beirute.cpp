@@ -1,29 +1,14 @@
 #include <iostream>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 
 #include "objJogador.h"
+#include "objInimigo.h"
 
 using namespace std;
-
-void colisao(float x, float y, float ex, float ey, int width, int height, int dir, float velocidade) {
-	if (x + width < ex || x > ex + width || y + height < ey || y > ey + height) {
-		//sem colisao de hitbox
-	}
-	else {
-		if (dir == 0)
-			y -= velocidade;
-		else if (dir == 1)
-			x += velocidade;
-		else if (dir == 2)
-			x -= velocidade;
-		else if (dir == 3)
-			y += velocidade;
-	}
-
-}
 
 void iniciar(bool teste, const char* descricao) {
 	if (teste) return;
@@ -50,11 +35,11 @@ int main()
 	ALLEGRO_DISPLAY* tela = al_create_display(800, 600);
 	iniciar(tela, "Tela");
 
-	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-	iniciar(queue, "Event Queue");
-
 	ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
 	iniciar(timer, "Timer");
+
+	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+	iniciar(queue, "Event Queue");
 
 	al_register_event_source(queue, al_get_display_event_source(tela));
 	al_register_event_source(queue, al_get_timer_event_source(timer));
@@ -133,31 +118,21 @@ int main()
 				break;
 		}
 
+		//fecha o jogo se o X for cliclado
+		if (done) break;
 
 		al_clear_to_color(al_map_rgb(0, 55, 0));
-
-		if (al_key_down(&ks, ALLEGRO_KEY_W))
-		{
+		if (al_key_down(&ks, ALLEGRO_KEY_W)){
 			al_draw_bitmap(W, jogador.x, jogador.y, 0);
-		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_D))
-		{
+		}else if (al_key_down(&ks, ALLEGRO_KEY_D)){
 			al_draw_bitmap(D, jogador.x, jogador.y, 0);
-
 		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_A))
-		{
+		else if (al_key_down(&ks, ALLEGRO_KEY_A)){
 			al_draw_bitmap(A, jogador.x, jogador.y, 0);
-
-		}
-		else
-		{
+		}else{
 			al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
 		}
 
-
-
-		al_clear_to_color(al_map_rgb(0, 0, 0));
 		//desenha todos os inimigos na tela
 		for (int i = 0; i < size; i++) {
 			int r = rand() % 255;

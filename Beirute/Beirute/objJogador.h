@@ -46,5 +46,21 @@ class objJogador
 			}
 			colisao(x , y, 200, 200, 32, 32, dir, velocidade);
 		}
+
+		void colisao(float x, float y, float ex, float ey, int width, int height, int dir, float velocidade) {
+			if (x + width < ex || x > ex + width || y + height < ey || y > ey + height) {
+				//sem colisao de hitbox
+			}
+			else {
+				if (dir == 0)
+					y -= velocidade;
+				else if (dir == 1)
+					x += velocidade;
+				else if (dir == 2)
+					x -= velocidade;
+				else if (dir == 3)
+					y += velocidade;
+			}
+		}
 };
 
