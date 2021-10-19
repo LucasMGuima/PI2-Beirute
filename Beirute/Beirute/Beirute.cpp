@@ -7,6 +7,9 @@
 
 #include "objJogador.h"
 #include "objInimigo.h"
+#include "bloco.h"
+
+#include "FazeMaker.h"
 
 using namespace std;
 
@@ -16,14 +19,7 @@ void iniciar(bool teste, const char* descricao) {
 	printf("Nao foi possivel iniciar %s\n", descricao);
 }
 
-struct bloco
-{
-	float x, y;
 
-	void desenhar() {
-		al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(0, 255, 0));
-	}
-};
 
 int main()
 {
@@ -56,6 +52,8 @@ int main()
 
 	bool done = false;
 
+	FazeMaker fazeMaker;
+
 	objInimigo inimigo01(400.0, 300.0, esqDir, 3.0, 0);
 	objInimigo inimigo02(200.0, 300.0, cimaBaixo, 2.0, 0);
 	objInimigo inimigo03(200.0, 100.0, cimaBaixo, 2.0, 0);
@@ -63,25 +61,12 @@ int main()
 	objInimigo inimigo05(300.0, 100.0, quadrado, 2.5, 200);
 
 	objInimigo inimigos[] = {inimigo01, inimigo02, inimigo03};
-
-	bloco b1;
-	b1.x = 100;
-	b1.y = 300;
-
-	bloco b2;
-	b2.x = 600;
-	b2.y = 300;
-
-	bloco b3;
-	b3.x = 300;
-	b3.y = 300;
-
-	bloco blocos[] = {b1, b2, b3};
+	bloco blocos[999];
+	fazeMaker.criarParedes(1, blocos);
 
 	//tamanho dos arrays
 	int size = (sizeof inimigos) / (sizeof *inimigos);
 	int size_bloc = (sizeof blocos) / (sizeof *blocos);
-
 
 	ALLEGRO_EVENT evento;
 	ALLEGRO_KEYBOARD_STATE ks;
@@ -133,6 +118,13 @@ int main()
 			al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
 		}
 
+		//desenha os blocos
+		for (int i = 0; i < size_bloc; i++) {
+			if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
+				blocos[i].desenhar();
+			}
+		}
+
 		//desenha todos os inimigos na tela
 		for (int i = 0; i < size; i++) {
 			int r = rand() % 255;
@@ -140,9 +132,6 @@ int main()
 			int b = rand() % 255;
 			inimigos[i].desenhar(r,g,b);
 		}
-		b1.desenhar();
-		b2.desenhar();
-		b3.desenhar();
 
 		al_flip_display();
 	}
