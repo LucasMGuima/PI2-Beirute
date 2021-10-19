@@ -263,8 +263,9 @@ class objInimigo {
 					direc = 0;
 				}
 			}
-
 		}
+
+
 
 		void desenhar(int r, int g, int b) {
 			//se redesenha na tela com base na nova posição

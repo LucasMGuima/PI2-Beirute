@@ -62,5 +62,22 @@ class objJogador
 					y += velocidade;
 			}
 		}
+		void colisaoCirc(float x, float y, float ex, float ey, int praio, int eraio, int dir, float velocidade) {
+			if (sqrt(pow(x - ex, 2) + pow(y - ey, 2)) < praio + eraio) {
+				//sem colisao de hitbox
+			}
+			else {
+				if (dir == 0)
+					y -= velocidade;
+				else if (dir == 1)
+					x += velocidade;
+				else if (dir == 2)
+					x -= velocidade;
+				else if (dir == 3)
+					y += velocidade;
+			}
+		}
+
+		
 };
 
