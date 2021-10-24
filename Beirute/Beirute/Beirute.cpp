@@ -54,25 +54,38 @@ int main()
 
 	FazeMaker fazeMaker;
 
+	/*
 	objInimigo inimigo01(400.0, 300.0, esqDir, 3.0, 0);
 	objInimigo inimigo02(200.0, 300.0, cimaBaixo, 2.0, 0);
 	objInimigo inimigo03(200.0, 100.0, cimaBaixo, 2.0, 0);
 	objInimigo inimigo04(300.0, 500.0, triangulo, 2.5, 200);
 	objInimigo inimigo05(300.0, 100.0, quadrado, 2.5, 200);
+	*/
 
-	objInimigo inimigos[] = {inimigo01, inimigo02, inimigo03};
+	objInimigo inimigos[999];
 	bloco blocos[999];
-	fazeMaker.criarParedes(1, blocos);
 
 	//tamanho dos arrays
 	int size = (sizeof inimigos) / (sizeof *inimigos);
 	int size_bloc = (sizeof blocos) / (sizeof *blocos);
+
+	//fase atual
+	int fase = 1;
+	int lastFase = 0;
 
 	ALLEGRO_EVENT evento;
 	ALLEGRO_KEYBOARD_STATE ks;
 
 	al_start_timer(timer);
 	while (true) {
+		//atualiza o nivel
+		if (lastFase != fase) {
+			//cria as paredes
+			fazeMaker.criarParedes(fase, blocos);
+			//spawna os inimgos
+			fazeMaker.criarInimigos(fase, inimigos);
+			lastFase = fase;
+		}
 		al_wait_for_event(queue, &evento);
 
 		switch (evento.type) {
@@ -94,6 +107,11 @@ int main()
 						}
 					}
 					inimigos[i].mover(tela);
+				}
+
+				//TROCA A FASE MANUAL
+				if (al_key_down(&ks, ALLEGRO_KEY_ALT)) {
+					fase += 1;
 				}
 
 				break;
@@ -127,10 +145,12 @@ int main()
 
 		//desenha todos os inimigos na tela
 		for (int i = 0; i < size; i++) {
-			int r = rand() % 255;
-			int g = rand() % 255;
-			int b = rand() % 255;
-			inimigos[i].desenhar(r,g,b);
+			if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
+				int r = rand() % 255;
+				int g = rand() % 255;
+				int b = rand() % 255;
+				inimigos[i].desenhar(r, g, b);
+			}
 		}
 
 		al_flip_display();
