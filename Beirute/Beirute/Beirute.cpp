@@ -54,14 +54,6 @@ int main()
 
 	FazeMaker fazeMaker;
 
-	/*
-	objInimigo inimigo01(400.0, 300.0, esqDir, 3.0, 0);
-	objInimigo inimigo02(200.0, 300.0, cimaBaixo, 2.0, 0);
-	objInimigo inimigo03(200.0, 100.0, cimaBaixo, 2.0, 0);
-	objInimigo inimigo04(300.0, 500.0, triangulo, 2.5, 200);
-	objInimigo inimigo05(300.0, 100.0, quadrado, 2.5, 200);
-	*/
-
 	objInimigo inimigos[999];
 	bloco blocos[999];
 
@@ -92,7 +84,7 @@ int main()
 			case ALLEGRO_EVENT_TIMER:
 				//movimento do jogador
 				al_get_keyboard_state(&ks);
-				jogador.movimento(ks, tela);
+				jogador.movimento(ks, tela, blocos);
 
 				//movimento dos inimigos
 				for (int i = 0; i < size; i++) {
