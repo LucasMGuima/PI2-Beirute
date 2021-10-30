@@ -20,6 +20,8 @@ class objInimigo {
 		double x, y, velocida;
 		int tipoCaminho;
 
+		objInimigo() { x = -1; y = -1; tipoCaminho = 0; velocida = 0; mov_dist = 0; };
+
 		objInimigo(double new_x, double new_y, int new_tipoCaminho, double new_velo, int new_movDist) {
 			x = new_x;
 			y = new_y;

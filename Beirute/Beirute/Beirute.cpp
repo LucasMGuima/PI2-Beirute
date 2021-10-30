@@ -7,6 +7,9 @@
 
 #include "objJogador.h"
 #include "objInimigo.h"
+#include "bloco.h"
+
+#include "FazeMaker.h"
 
 using namespace std;
 
@@ -16,14 +19,7 @@ void iniciar(bool teste, const char* descricao) {
 	printf("Nao foi possivel iniciar %s\n", descricao);
 }
 
-struct bloco
-{
-	float x, y;
 
-	void desenhar() {
-		al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(0, 255, 0));
-	}
-};
 
 int main()
 {
@@ -56,45 +52,39 @@ int main()
 
 	bool done = false;
 
-	objInimigo inimigo01(400.0, 300.0, esqDir, 3.0, 0);
-	objInimigo inimigo02(200.0, 300.0, cimaBaixo, 2.0, 0);
-	objInimigo inimigo03(200.0, 100.0, cimaBaixo, 2.0, 0);
-	objInimigo inimigo04(300.0, 500.0, triangulo, 2.5, 200);
-	objInimigo inimigo05(300.0, 100.0, quadrado, 2.5, 200);
+	FazeMaker fazeMaker;
 
-	objInimigo inimigos[] = {inimigo01, inimigo02, inimigo03};
-
-	bloco b1;
-	b1.x = 100;
-	b1.y = 300;
-
-	bloco b2;
-	b2.x = 600;
-	b2.y = 300;
-
-	bloco b3;
-	b3.x = 300;
-	b3.y = 300;
-
-	bloco blocos[] = {b1, b2, b3};
+	objInimigo inimigos[999];
+	bloco blocos[999];
 
 	//tamanho dos arrays
 	int size = (sizeof inimigos) / (sizeof *inimigos);
 	int size_bloc = (sizeof blocos) / (sizeof *blocos);
 
+	//fase atual
+	int fase = 1;
+	int lastFase = 0;
 
 	ALLEGRO_EVENT evento;
 	ALLEGRO_KEYBOARD_STATE ks;
 
 	al_start_timer(timer);
 	while (true) {
+		//atualiza o nivel
+		if (lastFase != fase) {
+			//cria as paredes
+			fazeMaker.criarParedes(fase, blocos);
+			//spawna os inimgos
+			fazeMaker.criarInimigos(fase, inimigos);
+			lastFase = fase;
+		}
 		al_wait_for_event(queue, &evento);
 
 		switch (evento.type) {
 			case ALLEGRO_EVENT_TIMER:
 				//movimento do jogador
 				al_get_keyboard_state(&ks);
-				jogador.movimento(ks, tela);
+				jogador.movimento(ks, tela, blocos);
 
 				//movimento dos inimigos
 				for (int i = 0; i < size; i++) {
@@ -109,6 +99,11 @@ int main()
 						}
 					}
 					inimigos[i].mover(tela);
+				}
+
+				//TROCA A FASE MANUAL
+				if (al_key_down(&ks, ALLEGRO_KEY_ALT)) {
+					fase += 1;
 				}
 
 				break;
@@ -133,16 +128,22 @@ int main()
 			al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
 		}
 
+		//desenha os blocos
+		for (int i = 0; i < size_bloc; i++) {
+			if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
+				blocos[i].desenhar();
+			}
+		}
+
 		//desenha todos os inimigos na tela
 		for (int i = 0; i < size; i++) {
-			int r = rand() % 255;
-			int g = rand() % 255;
-			int b = rand() % 255;
-			inimigos[i].desenhar(r,g,b);
+			if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
+				int r = rand() % 255;
+				int g = rand() % 255;
+				int b = rand() % 255;
+				inimigos[i].desenhar(r, g, b);
+			}
 		}
-		b1.desenhar();
-		b2.desenhar();
-		b3.desenhar();
 
 		al_flip_display();
 	}
