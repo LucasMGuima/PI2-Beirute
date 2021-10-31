@@ -267,7 +267,21 @@ class objInimigo {
 			}
 		}
 
+		//colisão com tamanho variado
+		void colisaoVar(int width, int length, float px, float py) {
+			if (x + TEMP_TAMANHO < px || x > px + width || y + TEMP_TAMANHO < py || y > py + length) {
+				//sem colisao de hitbox
+			}
+			else {
+				if (direc == 0) {
+					direc = 1;
+				}
+				else if (direc == 1) {
+					direc = 0;
+				}
+			}
 
+		}
 
 		void desenhar(int r, int g, int b) {
 			//se redesenha na tela com base na nova posição

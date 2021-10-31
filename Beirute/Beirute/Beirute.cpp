@@ -86,7 +86,7 @@ int main()
 				al_get_keyboard_state(&ks);
 				jogador.movimento(ks, tela, blocos);
 
-				//movimento dos inimigos
+				//corre pelo array de inimigos
 				for (int i = 0; i < size; i++) {
 					//checa por colis�o com solidos
 					for (int j = 0; j < size_bloc; j++) {
@@ -98,6 +98,10 @@ int main()
 							inimigos[i].colisao(inimigos[j].x, inimigos[j].y);
 						}
 					}
+					//checa se colidiu com o jogador e aplica o dano se sim
+					inimigos[i].colisaoVar(jogador.tamanho[0], jogador.tamanho[1], jogador.x, jogador.y);
+					jogador.recebeDano(inimigos[i].x, inimigos[i].y, 20);
+
 					inimigos[i].mover(tela);
 				}
 
