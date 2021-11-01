@@ -17,9 +17,9 @@ class objJogador
 		int tamanho[2];
 		
 
-		objJogador(float new_x, float new_y, float new_velocidade) {
-			x = new_x;
-			y = new_y;
+		objJogador(float new_velocidade) {
+			x = 300;
+			y = 300;
 			velocidade = new_velocidade;
 
 			tamanho[0] = 38;
