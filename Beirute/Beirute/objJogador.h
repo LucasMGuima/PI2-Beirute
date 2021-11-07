@@ -102,6 +102,7 @@ class objJogador
 				else if (dir == 3)
 					y += velocidade;
 			}
-		}		
+		}
+
 };
 

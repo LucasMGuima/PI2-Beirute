@@ -28,6 +28,13 @@ int main()
 	iniciar(al_init_primitives_addon(), "addon primitivas");
 	iniciar(al_init_image_addon(), "iniciar imagems");
 
+	ALLEGRO_BITMAP* W, * A, * D, * IMG;
+	IMG = al_load_bitmap("img.png");
+	A = al_load_bitmap("img2.png");
+	W = al_load_bitmap("img3.png");
+	D = al_load_bitmap("img1.png");
+
+
 	ALLEGRO_DISPLAY* tela = al_create_display(800, 600);
 	iniciar(tela, "Tela");
 
@@ -40,26 +47,23 @@ int main()
 	al_register_event_source(queue, al_get_display_event_source(tela));
 	al_register_event_source(queue, al_get_timer_event_source(timer));
 
-	ALLEGRO_BITMAP* W, * A, * D, * IMG;
-	IMG = al_load_bitmap("img.png");
-	A = al_load_bitmap("img2.png");
-	W = al_load_bitmap("img3.png");
-	D = al_load_bitmap("img1.png");
+	
 
 	objJogador jogador(400.0, 300.0, 4.0);
 
 	ALLEGRO_EVENT event;
 
 	bool done = false;
-
+	int AT = false;
+	
 	FazeMaker fazeMaker;
 
 	objInimigo inimigos[999];
 	bloco blocos[999];
 
 	//tamanho dos arrays
-	int size = (sizeof inimigos) / (sizeof *inimigos);
-	int size_bloc = (sizeof blocos) / (sizeof *blocos);
+	int size = (sizeof inimigos) / (sizeof * inimigos);
+	int size_bloc = (sizeof blocos) / (sizeof * blocos);
 
 	//fase atual
 	int fase = 1;
@@ -81,50 +85,56 @@ int main()
 		al_wait_for_event(queue, &evento);
 
 		switch (evento.type) {
-			case ALLEGRO_EVENT_TIMER:
-				//movimento do jogador
-				al_get_keyboard_state(&ks);
-				jogador.movimento(ks, tela, blocos);
+		case ALLEGRO_EVENT_TIMER:
+			//movimento do jogador
+			al_get_keyboard_state(&ks);
+			jogador.movimento(ks, tela, blocos);
 
-				//movimento dos inimigos
-				for (int i = 0; i < size; i++) {
-					//checa por colis�o com solidos
-					for (int j = 0; j < size_bloc; j++) {
-						inimigos[i].colisao(blocos[j].x, blocos[j].y);
-					}
-					//checa por colis�o com outros inimigos
-					for (int j = 0; j < size; j++) {
-						if (j != i) {
-							inimigos[i].colisao(inimigos[j].x, inimigos[j].y);
-						}
-					}
-					inimigos[i].mover(tela);
+			//movimento dos inimigos
+			for (int i = 0; i < size; i++) {
+				//checa por colis�o com solidos
+				for (int j = 0; j < size_bloc; j++) {
+					inimigos[i].colisao(blocos[j].x, blocos[j].y);
 				}
-
-				//TROCA A FASE MANUAL
-				if (al_key_down(&ks, ALLEGRO_KEY_ALT)) {
-					fase += 1;
+				//checa por colis�o com outros inimigos
+				for (int j = 0; j < size; j++) {
+					if (j != i) {
+						inimigos[i].colisao(inimigos[j].x, inimigos[j].y);
+					}
 				}
+				inimigos[i].mover(tela);
+			}
 
-				break;
-		
-			case ALLEGRO_EVENT_DISPLAY_CLOSE:
-				done = true;
-				break;
+			//TROCA A FASE MANUAL
+			if (al_key_down(&ks, ALLEGRO_KEY_ALT)) {
+				fase += 1;
+			}
+
+			break;
+
+		case ALLEGRO_EVENT_DISPLAY_CLOSE:
+			done = true;
+			break;
 		}
 
 		//fecha o jogo se o X for cliclado
 		if (done) break;
 
+
 		al_clear_to_color(al_map_rgb(0, 55, 0));
-		if (al_key_down(&ks, ALLEGRO_KEY_W)){
+
+
+		// arrumar mais tarde
+		if (al_key_down(&ks, ALLEGRO_KEY_W)) {
 			al_draw_bitmap(W, jogador.x, jogador.y, 0);
-		}else if (al_key_down(&ks, ALLEGRO_KEY_D)){
+		}
+		else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
 			al_draw_bitmap(D, jogador.x, jogador.y, 0);
 		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_A)){
+		else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
 			al_draw_bitmap(A, jogador.x, jogador.y, 0);
-		}else{
+		}
+		else {
 			al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
 		}
 
@@ -134,16 +144,29 @@ int main()
 				blocos[i].desenhar();
 			}
 		}
+		// aparece o attack
+		if (al_key_down(&ks, ALLEGRO_KEY_SPACE)) {
+			
+			AT = true;//determina o desaparecimento dosn inimigos
+			al_draw_rectangle(jogador.x + 50, jogador.y + 65, jogador.x - 10, jogador.y - 10, al_map_rgb(255, 0, 0), 1.0);
+
+		}
+
+
 
 		//desenha todos os inimigos na tela
 		for (int i = 0; i < size; i++) {
 			if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
-				int r = rand() % 255;
-				int g = rand() % 255;
-				int b = rand() % 255;
-				inimigos[i].desenhar(r, g, b);
-			}
+					if (jogador.x != inimigos[i].x and jogador.y != inimigos[i].y ) {
+						int r = rand() % 255;
+						int g = rand() % 255;
+						int b = rand() % 255;
+						inimigos[i].desenhar(r, g, b);
+					}
+				}
+			
 		}
+		
 
 		al_flip_display();
 	}
@@ -154,4 +177,4 @@ int main()
 	al_destroy_timer(timer);
 
 	return 0;
-}
+};

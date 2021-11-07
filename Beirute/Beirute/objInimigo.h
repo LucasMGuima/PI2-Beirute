@@ -19,6 +19,7 @@ class objInimigo {
 	public:
 		double x, y, velocida;
 		int tipoCaminho;
+		int ativo = true;
 
 		objInimigo() { x = -1; y = -1; tipoCaminho = 0; velocida = 0; mov_dist = 0; };
 
@@ -266,10 +267,11 @@ class objInimigo {
 				}
 			}
 		}
-
+		
 
 
 		void desenhar(int r, int g, int b) {
+			
 			//se redesenha na tela com base na nova posição
 			al_draw_filled_rectangle(x, y, x + TEMP_TAMANHO, y + TEMP_TAMANHO, al_map_rgb(r, g, b));
 		}
