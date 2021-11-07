@@ -19,7 +19,6 @@ class objInimigo {
 	public:
 		double x, y, velocida;
 		int tipoCaminho;
-		int ativo = true;
 
 		objInimigo() { x = -1; y = -1; tipoCaminho = 0; velocida = 0; mov_dist = 0; };
 
@@ -267,11 +266,24 @@ class objInimigo {
 				}
 			}
 		}
-		
 
+		//colisão com tamanho variado
+		void colisaoVar(int width, int length, float px, float py) {
+			if (x + TEMP_TAMANHO < px || x > px + width || y + TEMP_TAMANHO < py || y > py + length) {
+				//sem colisao de hitbox
+			}
+			else {
+				if (direc == 0) {
+					direc = 1;
+				}
+				else if (direc == 1) {
+					direc = 0;
+				}
+			}
+
+		}
 
 		void desenhar(int r, int g, int b) {
-			
 			//se redesenha na tela com base na nova posição
 			al_draw_filled_rectangle(x, y, x + TEMP_TAMANHO, y + TEMP_TAMANHO, al_map_rgb(r, g, b));
 		}

@@ -11,79 +11,114 @@ using namespace std;
 class FazeMaker {
 	/*
 		Cada ploco tem 20px, logo o arquivo pode ter a meta da altura da tela em linhas e a metada da largura em colunas.
+		P -> posição inicial do jogador
 		0 -> espaço vazio
 		1 -> muro
 		2 -> inimigo esquerda direita
 		3 -> inimigo cima baixo
 	*/
-	public:
-		void criarParedes(int level, bloco paredes[]) {
-			printf("criando paredes \n");
-			string linha;
+public:
+	void criarParedes(int level, bloco paredes[]) {
+		printf("criando paredes \n");
+		string linha;
 
-			ifstream arq;
-			arq.open(acharNivel(level));
+		ifstream arq;
+		arq.open(acharNivel(level));
 
-			if (arq.is_open()) {
-				printf("Aqrquivo aberto \n");
-				int count = 0;
-				int lin = 1;
-				while (!arq.eof()) {
-					getline(arq, linha);
-					
-					int lSize = linha.size();
+		if (arq.is_open()) {
+			printf("Aqrquivo aberto \n");
+			int count = 0;
+			int lin = 1;
+			while (!arq.eof()) {
+				getline(arq, linha);
 
-					for (int col = 0; col < lSize; col++) {
-						if (linha[col] == '1') {
-							bloco temp((col+1) * 20, lin * 20);
-							//printf("X: %.f Y: %.f \n", temp.x, temp.y);
-							paredes[count] = temp;
-							count++;
-						}
-					}
-					lin++;
-				}
-			}
-			else {
-				printf("Não foi pocivel abrir o arquivo");
-			}
+				int lSize = linha.size();
 
-			arq.close();
-		}
-
-		void criarInimigos(int level, objInimigo inimigos[]) {
-			printf("criando inimigos \n");
-			string linha;
-
-			ifstream arq;
-			arq.open(acharNivel(level));
-
-			if (arq.is_open()) {
-				printf("Arquivo aberto \n");
-				int count = 0;
-				int lin = 1;
-				while (!arq.eof()) {
-					getline(arq, linha);
-
-					int lSize = linha.size();
-
-					for (int col = 0; col < lSize; col++) {
-						if (linha[col] == '2') {
-							objInimigo temp((col+1) * 20, lin*20, esqDir, 4, 0);
-							printf("X: %.f Y: %.f \n", temp.x, temp.y);
-							inimigos[count] = temp;
-						}
-						else if (linha[col] == '3') {
-							objInimigo temp((col+1)*20, lin*20, cimaBaixo, 4, 0);
-							printf("X: %.f Y: %.f \n", temp.x, temp.y);
-							inimigos[count] = temp;
-						}
+				for (int col = 0; col < lSize; col++) {
+					if (linha[col] == '1') {
+						bloco temp((col + 1) * 20, lin * 20);
+						//printf("X: %.f Y: %.f \n", temp.x, temp.y);
+						paredes[count] = temp;
 						count++;
 					}
-					lin++;
 				}
+				lin++;
 			}
 		}
+		else {
+			printf("Não foi pocivel abrir o arquivo");
+		}
+
+		arq.close();
+	}
+
+	void criarInimigos(int level, objInimigo inimigos[]) {
+		printf("criando inimigos \n");
+		string linha;
+
+		ifstream arq;
+		arq.open(acharNivel(level));
+
+		if (arq.is_open()) {
+			printf("Arquivo aberto \n");
+			int count = 0;
+			int lin = 1;
+			while (!arq.eof()) {
+				getline(arq, linha);
+
+				int lSize = linha.size();
+
+				for (int col = 0; col < lSize; col++) {
+					if (linha[col] == '2') {
+						objInimigo temp((col + 1) * 20, lin * 20, esqDir, 4, 0);
+						printf("X: %.f Y: %.f \n", temp.x, temp.y);
+						inimigos[count] = temp;
+					}
+					else if (linha[col] == '3') {
+						objInimigo temp((col + 1) * 20, lin * 20, cimaBaixo, 4, 0);
+						printf("X: %.f Y: %.f \n", temp.x, temp.y);
+						inimigos[count] = temp;
+					}
+					count++;
+				}
+				lin++;
+			}
+		}
+	}
+
+	void posicionarJogador(int level, objJogador* j){
+		printf("procurando posicção do jogador \n");
+		string linha;
+
+		bool done = false;
+
+		ifstream arq;
+		arq.open(acharNivel(level));
+
+		if (arq.is_open()) {
+			printf("Arquivo aberto \n");
+			int count = 0;
+			int lin = 1;
+			while (!arq.eof()) {
+				getline(arq, linha);
+
+				int lSize = linha.size();
+
+				for (int col = 0; col < lSize; col++) {
+					if (linha[col] == 'P') {
+						j->x = col*20;
+						j->y = lin*20;
+						//acaba com o loop
+						col = lSize;
+						done = true;
+					}
+					count++;
+				}
+				lin++;
+				if (done) break;
+			}
+		}
+	}
 
 		//acha o arquivo do nivel
 		string acharNivel(int level) {
