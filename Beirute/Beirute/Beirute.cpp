@@ -58,11 +58,13 @@ int main()
 	ALLEGRO_EVENT event;
 
 	bool done = false;
+	bool AT = false;
 
 	FazeMaker fazeMaker;
 
 	objInimigo inimigos[999];
 	bloco blocos[999];
+	bloco ataque(0, 0);
 
 	//tamanho dos arrays
 	int size = (sizeof inimigos) / (sizeof *inimigos);
@@ -118,6 +120,25 @@ int main()
 					}
 				}
 
+					// criar hitbox ataque
+					if (al_key_down(&ks, ALLEGRO_KEY_SPACE)) {
+						ataque.x = jogador.x + 50;
+						ataque.y = jogador.y + 65;
+
+						AT = true;//determina o desaparecimento dosn inimigos
+						//al_draw_rectangle(jogador.x + 50, jogador.y + 65, jogador.x - 10, jogador.y - 10, al_map_rgb(255, 0, 0), 1.0);
+					}
+					// checa colisao do inimigo com o hitbox
+					if (AT) {
+						for (int i = 0; i < size; i++) {
+							if (inimigos[i].colisaoHitbox(ataque.x, ataque.y)) {
+								inimigos[i].vivo = false;
+								AT = false;
+								i = size;
+							}
+						}
+					}
+
 				//TROCA A FASE MANUAL
 				if (al_key_down(&ks, ALLEGRO_KEY_ALT)) {
 					fase += 1;
@@ -168,14 +189,19 @@ int main()
 					blocos[i].desenhar();
 				}
 			}
+			if (AT) {
+				ataque.desenhar();
+			}
 
 			//desenha todos os inimigos na tela
 			for (int i = 0; i < size; i++) {
 				if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
-					int r = rand() % 255;
-					int g = rand() % 255;
-					int b = rand() % 255;
-					inimigos[i].desenhar(r, g, b);
+					if (inimigos[i].vivo) {
+						int r = rand() % 255;
+						int g = rand() % 255;
+						int b = rand() % 255;
+						inimigos[i].desenhar(r, g, b);
+					}
 				}
 			}
 		}
@@ -187,7 +213,7 @@ int main()
 			al_draw_text(font24, al_map_rgb(255,255,255), 800/2, 600/2, ALLEGRO_ALIGN_CENTRE,"Você Morreu");
 			al_draw_text(font12, al_map_rgb(255, 255, 255), 800/2, 600/2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
 		}
-
+		AT = false;
 		al_flip_display();
 	}
 
