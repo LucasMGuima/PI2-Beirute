@@ -73,6 +73,8 @@ int main()
 	//fase atual
 	int fase = 1;
 	int lastFase = 0;
+	//ultima fase
+	int endFase = 2;
 
 	ALLEGRO_EVENT evento;
 	ALLEGRO_KEYBOARD_STATE ks;
@@ -163,10 +165,17 @@ int main()
 				}
 
 				//reseta a fase se morto
-				if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+				if (al_key_down(&ks, ALLEGRO_KEY_R)) {
 					jogador.vida = 3;
 					//recaga a faze
 					lastFase = 0;
+				}
+				//passa pra procima fase
+				if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+					//checa se n é a ultima fase
+					if (fase < endFase) {
+						fase += 1;
+					}
 				}
 
 
@@ -230,7 +239,7 @@ int main()
 
 			//mostra o texto
 			al_draw_text(font24, al_map_rgb(255,255,255), 800/2, 600/2, ALLEGRO_ALIGN_CENTRE,"Você Morreu");
-			al_draw_text(font12, al_map_rgb(255, 255, 255), 800/2, 600/2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
+			al_draw_text(font12, al_map_rgb(255, 255, 255), 800/2, 600/2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione R para continuar");
 		}
 		bool vitoria = true;
 		for (int i = 0; i < size; i++) {
@@ -240,7 +249,6 @@ int main()
 			}
 		}
 		if (vitoria) {
-			//jogador morto
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 
 			//mostra o texto
