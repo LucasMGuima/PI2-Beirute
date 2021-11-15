@@ -1,28 +1,19 @@
 #include <iostream>
+#include <cmath>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+
 #include "objJogador.h"
+#include "objInimigo.h"
+#include "bloco.h"
+
+#include "FazeMaker.h"
 
 using namespace std;
-void colisao(float x, float y, float ex, float ey, int width, int height, int dir, float velocidade) {
-	if (x + width < ex || x > ex + width || y + height < ey || y > ey + height) {
-		//sem colisao de hitbox
-	}
-	else {
-		if (dir == 0)
-			y -= velocidade;
-		else if (dir == 1)
-			x += velocidade;
-		else if (dir == 2)
-			x -= velocidade;
-		else if (dir == 3)
-			y += velocidade;
-	}
-
-}
-
 
 void iniciar(bool teste, const char* descricao) {
 	if (teste) return;
@@ -36,7 +27,25 @@ int main()
 	iniciar(al_install_keyboard(), "teclado");
 	iniciar(al_init_primitives_addon(), "addon primitivas");
 	iniciar(al_init_image_addon(), "iniciar imagems");
+	iniciar(al_init_ttf_addon(), "leitor de .ttf");
+	iniciar(al_init_font_addon(), "fontes");
 
+	ALLEGRO_DISPLAY* tela = al_create_display(800, 600);
+	iniciar(tela, "Tela");
+
+	//fontes
+	ALLEGRO_FONT* font24 = al_load_font("fonts/arial.ttf", 24, 0);
+	ALLEGRO_FONT* font12 = al_load_font("fonts/arial.ttf", 12, 0);
+
+
+	ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
+	iniciar(timer, "Timer");
+
+	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+	iniciar(queue, "Event Queue");
+
+	al_register_event_source(queue, al_get_display_event_source(tela));
+	al_register_event_source(queue, al_get_timer_event_source(timer));
 
 	ALLEGRO_BITMAP* W, * A, * D, * IMG;
 	IMG = al_load_bitmap("img.png");
@@ -44,63 +53,209 @@ int main()
 	W = al_load_bitmap("img3.png");
 	D = al_load_bitmap("img1.png");
 
+	objJogador jogador(4.0);
 
+	ALLEGRO_EVENT event;
 
-	ALLEGRO_DISPLAY* tela = al_create_display(800, 600);
-	iniciar(tela, "tela");
+	bool done = false;
+	bool AT = false;
 
+	FazeMaker fazeMaker;
 
-	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-	iniciar(queue, "queue");
+	objInimigo inimigos[999];
+	bloco blocos[999];
+	bloco ataque(0, 0);
 
-	ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30);
-	iniciar(timer, "timer");
+	//tamanho dos arrays
+	int size = (sizeof inimigos) / (sizeof *inimigos);
+	int size_bloc = (sizeof blocos) / (sizeof *blocos);
 
-	al_register_event_source(queue, al_get_keyboard_event_source());
-	al_register_event_source(queue, al_get_timer_event_source(timer));
-
-
-	objJogador jogador(400.0, 300.0, 4.0);
+	//fase atual
+	int fase = 1;
+	int lastFase = 0;
+	//ultima fase
+	int endFase = 2;
 
 	ALLEGRO_EVENT evento;
 	ALLEGRO_KEYBOARD_STATE ks;
 
 	al_start_timer(timer);
 	while (true) {
+		//atualiza o nivel
+		if (lastFase != fase) {
+			//cria as paredes
+			fazeMaker.criarParedes(fase, blocos);
+			//spawna os inimgos
+			fazeMaker.criarInimigos(fase, inimigos);
+			//posiciona o jogador
+			fazeMaker.posicionarJogador(fase, &jogador);
+
+			lastFase = fase;
+		}
 		al_wait_for_event(queue, &evento);
 
 		switch (evento.type) {
-		case ALLEGRO_EVENT_TIMER:
-			al_get_keyboard_state(&ks);
-			jogador.movimento(ks, tela);
+			case ALLEGRO_EVENT_TIMER:
+				al_get_keyboard_state(&ks);
+				//checa se o jogador ainda esta vivo, conservar processamento
+				if (jogador.vida >= 0) {
+					//movimento do jogador
+					jogador.movimento(ks, tela, blocos);
 
-			break;
+					//corre pelo array de inimigos
+					for (int i = 0; i < size; i++) {
+						if (inimigos[i].vivo) {//checa por colis�o com solidos
+							for (int j = 0; j < size_bloc; j++) {
+								inimigos[i].colisao(blocos[j].x, blocos[j].y);
+							}
+							//checa por colis�o com outros inimigos
+							for (int j = 0; j < size; j++) {
+								if (j != i) {
+									inimigos[i].colisao(inimigos[j].x, inimigos[j].y);
+								}
+							}
+							//checa se colidiu com o jogador e aplica o dano se sim
+							inimigos[i].colisaoVar(jogador.tamanho[0], jogador.tamanho[1], jogador.x, jogador.y);
+
+							jogador.recebeDano(inimigos[i].x, inimigos[i].y, 20);
+
+							inimigos[i].mover(tela);
+						}
+					}
+
+				}
+
+					// criar hitbox ataque
+					if (al_key_down(&ks, ALLEGRO_KEY_SPACE)) {
+						if (al_key_down(&ks, ALLEGRO_KEY_W)) {
+							ataque.x = jogador.x + 10;
+							ataque.y = jogador.y - 25;
+						}
+						if (al_key_down(&ks, ALLEGRO_KEY_S)) {
+							ataque.x = jogador.x + 10;
+							ataque.y = jogador.y + 60;
+						}
+						if (al_key_down(&ks, ALLEGRO_KEY_A)) {
+							ataque.x = jogador.x - 25;
+							ataque.y = jogador.y + 25;
+						}
+						if (al_key_down(&ks, ALLEGRO_KEY_D)) {
+							ataque.x = jogador.x + 45;
+							ataque.y = jogador.y + 25;
+						}
+
+						
+						AT = true;//determina o desaparecimento dosn inimigos
+						//al_draw_rectangle(jogador.x + 50, jogador.y + 65, jogador.x - 10, jogador.y - 10, al_map_rgb(255, 0, 0), 1.0);
+					}
+					// checa colisao do inimigo com o hitbox
+					if (AT) {
+						for (int i = 0; i < size; i++) {
+							if (inimigos[i].colisaoHitbox(ataque.x, ataque.y)) {
+								inimigos[i].vivo = false;
+								AT = false;
+								i = size;
+							}
+						}
+					}
+
+				//TROCA A FASE MANUAL
+				if (al_key_down(&ks, ALLEGRO_KEY_ALT)) {
+					fase += 1;
+				}
+
+				//reseta a fase se morto
+				if (al_key_down(&ks, ALLEGRO_KEY_R)) {
+					jogador.vida = 3;
+					//recaga a faze
+					lastFase = 0;
+				}
+				//passa pra procima fase
+				if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+					//checa se n é a ultima fase
+					if (fase < endFase) {
+						fase += 1;
+					}
+				}
+
+
+				//fecha a janela no ESC
+				if (al_key_down(&ks, ALLEGRO_KEY_ESCAPE)) {
+					done = true;
+				}
+
+				break;
+		
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				done = true;
+				break;
 		}
 
+		if (done) break;
 
-		al_clear_to_color(al_map_rgb(0, 55, 0));
+		//checa se o jogador ainda esta vivo
+		//se sim desenha a cena normalmente, se n apresenta a tela de morte
+		if (jogador.vida >= 0) {
+			al_clear_to_color(al_map_rgb(0, 55, 0));
+			if (al_key_down(&ks, ALLEGRO_KEY_W)) {
+				al_draw_bitmap(W, jogador.x, jogador.y, 0);
 
-		if (al_key_down(&ks, ALLEGRO_KEY_W))
-		{
-			al_draw_bitmap(W, jogador.x, jogador.y, 0);
+			}
+			else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
+				al_draw_bitmap(D, jogador.x, jogador.y, 0);
+			}
+			else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
+				al_draw_bitmap(A, jogador.x, jogador.y, 0);
+			}
+			else {
+				al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
+			}
+
+			//desenha os blocos
+			for (int i = 0; i < size_bloc; i++) {
+				if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
+					blocos[i].desenhar();
+				}
+			}
+			if (AT) {
+				ataque.desenhar();
+			}
+
+			//desenha todos os inimigos na tela
+			for (int i = 0; i < size; i++) {
+				if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
+					if (inimigos[i].vivo) {
+						int r = rand() % 255;
+						int g = rand() % 255;
+						int b = rand() % 255;
+						inimigos[i].desenhar(r, g, b);
+					}
+				}
+			}
 		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_D))
-		{
-			al_draw_bitmap(D, jogador.x, jogador.y, 0);
+		else {
+			//jogador morto
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 
+			//mostra o texto
+			al_draw_text(font24, al_map_rgb(255,255,255), 800/2, 600/2, ALLEGRO_ALIGN_CENTRE,"Você Morreu");
+			al_draw_text(font12, al_map_rgb(255, 255, 255), 800/2, 600/2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione R para continuar");
 		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_A))
-		{
-			al_draw_bitmap(A, jogador.x, jogador.y, 0);
-
+		bool vitoria = true;
+		for (int i = 0; i < size; i++) {
+			if (inimigos[i].vivo and inimigos[i].x != -1) {
+				vitoria = false;
+				i = size;
+			}
 		}
-		else
-		{
-			al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
+		if (vitoria) {
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+
+			//mostra o texto
+			al_draw_text(font24, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2, ALLEGRO_ALIGN_CENTRE, "Você Venceu");
+			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
 		}
-
-
-
+		AT = false;
 		al_flip_display();
 	}
 
