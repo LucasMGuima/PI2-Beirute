@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "bloco.h"
+#include "powerUp.h"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ class FazeMaker {
 	/*
 		Cada ploco tem 20px, logo o arquivo pode ter a meta da altura da tela em linhas e a metada da largura em colunas.
 		P -> posição inicial do jogador
+		U -> power up
 		0 -> espaço vazio
 		1 -> muro
 		2 -> inimigo esquerda direita
@@ -120,23 +122,58 @@ public:
 		}
 	}
 
-		//acha o arquivo do nivel
-		//SEMPRE Q CRIADO UM NOVO NVIEL, DEVE SE COLOCAR O ENDEREÇO DELE AQUI
-		string acharNivel(int level) {
-			string levelStg;
-			printf("Procurando o arquivo \n");
-			switch (level) {
-			case 1:
-				levelStg = "levels/lv01.txt";
-				printf("Achou o lv01 \n");
-				break;
+	void criarPowerUp(int level, powerUp listPu[]) {
+		printf("criando power ups \n");
+		string linha;
 
-			case 2:
-				levelStg = "levels/lv02.txt";
-				printf("Achou o lv02 \n");
-				break;
+		ifstream arq;
+		arq.open(acharNivel(level));
+
+		if (arq.is_open()) {
+			printf("Aqrquivo aberto \n");
+			int count = 0;
+			int lin = 1;
+			while (!arq.eof()) {
+				getline(arq, linha);
+
+				int lSize = linha.size();
+
+				for (int col = 0; col < lSize; col++) {
+					if (linha[col] == 'U') {
+						powerUp pu;
+						pu.setPos((col * 20), (lin * 20));
+						pu.setarTipo();
+						listPu[count] = pu;
+						count++;
+					}
+				}
+				lin++;
 			}
-
-			return levelStg;
 		}
+		else {
+			printf("Não foi pocivel abrir o arquivo");
+		}
+
+		arq.close();
+	}
+
+	//acha o arquivo do nivel
+	//SEMPRE Q CRIADO UM NOVO NVIEL, DEVE SE COLOCAR O ENDEREÇO DELE AQUI
+	string acharNivel(int level) {
+		string levelStg;
+		printf("Procurando o arquivo \n");
+		switch (level) {
+		case 1:
+			levelStg = "levels/lv01.txt";
+			printf("Achou o lv01 \n");
+			break;
+
+		case 2:
+			levelStg = "levels/lv02.txt";
+			printf("Achou o lv02 \n");
+			break;
+		}
+
+		return levelStg;
+	}
 };

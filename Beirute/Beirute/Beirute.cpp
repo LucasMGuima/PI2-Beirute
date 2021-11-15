@@ -10,6 +10,7 @@
 #include "objJogador.h"
 #include "objInimigo.h"
 #include "bloco.h"
+#include "powerUp.h"
 
 #include "FazeMaker.h"
 
@@ -55,13 +56,12 @@ int main()
 
 	objJogador jogador(4.0);
 
-	ALLEGRO_EVENT event;
-
 	bool done = false;
 	bool AT = false;
 
 	FazeMaker fazeMaker;
 
+	powerUp powerUps[10];
 	objInimigo inimigos[999];
 	bloco blocos[999];
 	bloco ataque(0, 0);
@@ -69,6 +69,7 @@ int main()
 	//tamanho dos arrays
 	int size = (sizeof inimigos) / (sizeof *inimigos);
 	int size_bloc = (sizeof blocos) / (sizeof *blocos);
+	int powerUp_size = (sizeof powerUps) / (sizeof *powerUps);
 
 	//fase atual
 	int fase = 1;
@@ -76,7 +77,7 @@ int main()
 	//ultima fase
 	int endFase = 2;
 
-	ALLEGRO_EVENT evento;
+	ALLEGRO_EVENT event;
 	ALLEGRO_KEYBOARD_STATE ks;
 
 	al_start_timer(timer);
@@ -89,12 +90,15 @@ int main()
 			fazeMaker.criarInimigos(fase, inimigos);
 			//posiciona o jogador
 			fazeMaker.posicionarJogador(fase, &jogador);
+			//cria o(s) power ups
+			fazeMaker.criarPowerUp(fase, powerUps);
 
 			lastFase = fase;
 		}
-		al_wait_for_event(queue, &evento);
+		
+		al_wait_for_event(queue, &event);
 
-		switch (evento.type) {
+		switch (event.type) {
 			case ALLEGRO_EVENT_TIMER:
 				al_get_keyboard_state(&ks);
 				//checa se o jogador ainda esta vivo, conservar processamento
@@ -120,6 +124,16 @@ int main()
 							jogador.recebeDano(inimigos[i].x, inimigos[i].y, 20);
 
 							inimigos[i].mover(tela);
+						}
+					}
+
+					//corre pelo array dos powerUps
+					for (int i = 0; i < powerUp_size; i++) {
+						if (powerUps[i].existe) {
+							//checa por colisao com o jogador
+							if (powerUps[i].colisaoVar(jogador.tamanho[0], jogador.tamanho[1], jogador.x, jogador.y)) {
+								powerUps[i].efeito(&jogador);
+							}
 						}
 					}
 
@@ -230,6 +244,14 @@ int main()
 						int b = rand() % 255;
 						inimigos[i].desenhar(r, g, b);
 					}
+				}
+			}
+
+			//desenha os powerUps
+			for (int i = 0; i < powerUp_size; i++) {
+				if (powerUps[i].existe) {
+					powerUps[i].desenhar();
+					//printf("PowerUps[%d] \n", i);
 				}
 			}
 		}

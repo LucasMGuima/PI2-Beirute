@@ -15,6 +15,7 @@ class objJogador
 		enum Direction { DOWN, LEFT, RIGHT, UP };
 		bool dano = false;
 		int tamanho[2];
+		int armadura = 0;
 		
 
 		objJogador(float new_velocidade) {
