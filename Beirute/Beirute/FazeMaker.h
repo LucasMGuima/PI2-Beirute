@@ -13,7 +13,9 @@ class FazeMaker {
 	/*
 		Cada ploco tem 20px, logo o arquivo pode ter a meta da altura da tela em linhas e a metada da largura em colunas.
 		P -> posição inicial do jogador
-		U -> power up
+		V -> power up vida
+		M -> power up moviemento
+		A -> power up armadura
 		0 -> espaço vazio
 		1 -> muro
 		2 -> inimigo esquerda direita
@@ -139,10 +141,11 @@ public:
 				int lSize = linha.size();
 
 				for (int col = 0; col < lSize; col++) {
-					if (linha[col] == 'U') {
+					char letra = linha[col];
+					if (letra == 'A' || letra == 'V' || letra == 'M') {
 						powerUp pu;
 						pu.setPos((col * 20), (lin * 20));
-						pu.setarTipo();
+						pu.setarTipo(letra);
 						listPu[count] = pu;
 						count++;
 					}

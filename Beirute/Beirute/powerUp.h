@@ -1,5 +1,6 @@
 #pragma once
 #include "enum.h"
+#include <random>
 
 class powerUp {
 	private:
@@ -19,27 +20,22 @@ class powerUp {
 			img = 0;
 		}
 
-		void setarTipo() {
-			int num = rand() % 6; //pega um valor aleatório entre 0 - 5
-
+		void setarTipo(char tipo) {
 			//seta o tipo do powerUp
-			switch (num){
-				case 0:
-				case 1:
+			switch (tipo){
+				case 'V':
 					//seta o tipo
 					tipo = vida;
 					//carrega a img equivalente
 					img = al_load_bitmap("imgs/powerUp/medkit.png");
 					break;
-				case 2:
-				case 3:
+				case 'A':
 					//seta o tipo
 					tipo = defesa;
 					//carrega a img equivalente
 					img = al_load_bitmap("imgs/powerUp/armadura.png");
 					break;
-				case 4:
-				case 5:
+				case 'M':
 					//seta o tipo
 					tipo = movimento;
 					//carega a img equivalente
