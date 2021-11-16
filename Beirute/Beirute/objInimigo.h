@@ -19,6 +19,7 @@ class objInimigo {
 	public:
 		double x, y, velocida;
 		int tipoCaminho;
+		bool vivo = true;
 
 		objInimigo() { x = -1; y = -1; tipoCaminho = 0; velocida = 0; mov_dist = 0; };
 
@@ -264,6 +265,14 @@ class objInimigo {
 				else if (direc == 1) {
 					direc = 0;
 				}
+			}
+		}
+		bool colisaoHitbox(float ex, float ey) {
+			if (x + TEMP_TAMANHO < ex || x > ex + TEMP_TAMANHO || y + TEMP_TAMANHO < ey || y > ey + TEMP_TAMANHO) {
+				return false;
+			}
+			else {
+				return true;
 			}
 		}
 

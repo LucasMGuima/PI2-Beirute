@@ -121,6 +121,7 @@ public:
 	}
 
 		//acha o arquivo do nivel
+		//SEMPRE Q CRIADO UM NOVO NVIEL, DEVE SE COLOCAR O ENDEREÇO DELE AQUI
 		string acharNivel(int level) {
 			string levelStg;
 			printf("Procurando o arquivo \n");
