@@ -25,19 +25,19 @@ class powerUp {
 			switch (tipo){
 				case 'V':
 					//seta o tipo
-					tipo = vida;
+					this->tipo = vida;
 					//carrega a img equivalente
 					img = al_load_bitmap("imgs/powerUp/medkit.png");
 					break;
 				case 'A':
 					//seta o tipo
-					tipo = defesa;
+					this->tipo = defesa;
 					//carrega a img equivalente
 					img = al_load_bitmap("imgs/powerUp/armadura.png");
 					break;
 				case 'M':
 					//seta o tipo
-					tipo = movimento;
+					this->tipo = movimento;
 					//carega a img equivalente
 					img = al_load_bitmap("imgs/powerUp/bota.png");
 					break;
@@ -57,10 +57,12 @@ class powerUp {
 
 		void efeito(objJogador* jogador) {
 			//aplica o efeito de acordo com o tipo do powerUp
+			printf("aplicando efeito \n");
+			printf("tipo = %d \n", tipo);
 			switch (tipo)
 			{
 				case vida:
-					jogador->vida += 1;
+					jogador->incVida(1);
 					break;
 				case defesa:
 					jogador->armadura += 1;

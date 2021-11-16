@@ -143,12 +143,15 @@ class objJogador
 				}
 				//aplica o dano uma vez
 				if (aplicar) {
-					vida--;
+					if (armadura == 0) vida--;
+					else armadura--;
 					aplicar = false;
 				}
-				printf("Vida : %d | ", vida);
-				printf("Time : %d \n", timerDano);
 			}
+		}
+
+		void incVida(int inc) {
+			if(vida > 3) vida += inc;
 		}
 };
 

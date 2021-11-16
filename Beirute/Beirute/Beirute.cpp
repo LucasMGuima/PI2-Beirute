@@ -6,6 +6,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <string>
 
 #include "objJogador.h"
 #include "objInimigo.h"
@@ -160,7 +161,6 @@ int main()
 
 						
 						AT = true;//determina o desaparecimento dosn inimigos
-						//al_draw_rectangle(jogador.x + 50, jogador.y + 65, jogador.x - 10, jogador.y - 10, al_map_rgb(255, 0, 0), 1.0);
 					}
 					// checa colisao do inimigo com o hitbox
 					if (AT) {
@@ -251,7 +251,6 @@ int main()
 			for (int i = 0; i < powerUp_size; i++) {
 				if (powerUps[i].existe) {
 					powerUps[i].desenhar();
-					//printf("PowerUps[%d] \n", i);
 				}
 			}
 		}
