@@ -47,12 +47,11 @@ int main()
 	al_register_event_source(queue, al_get_display_event_source(tela));
 	al_register_event_source(queue, al_get_timer_event_source(timer));
 
-	ALLEGRO_BITMAP* W, * A, * D, * IMG;
-	IMG = al_load_bitmap("img.png");
-	A = al_load_bitmap("img2.png");
-	W = al_load_bitmap("img3.png");
-	D = al_load_bitmap("img1.png");
-
+	ALLEGRO_BITMAP* W, * A, * D, * IMG, * atak;
+	IMG = al_load_bitmap("medico_frente.png");
+	A = al_load_bitmap("medico_esq_andar_1.png");
+	W = al_load_bitmap("medico_costas.png");
+	D = al_load_bitmap("medico_dir_andar_1.png");
 	objJogador jogador(4.0);
 
 	ALLEGRO_EVENT event;
