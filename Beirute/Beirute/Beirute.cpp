@@ -238,10 +238,7 @@ int main()
 			for (int i = 0; i < size; i++) {
 				if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
 					if (inimigos[i].vivo) {
-						int r = rand() % 255;
-						int g = rand() % 255;
-						int b = rand() % 255;
-						inimigos[i].desenhar(r, g, b);
+						inimigos[i].desenhar();
 					}
 				}
 			}
