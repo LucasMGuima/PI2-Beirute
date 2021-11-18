@@ -6,3 +6,9 @@ enum tipoMovInimi {
 	triangulo,
 	quadrado
 };
+
+enum tipoPowerUp {
+	vida,
+	defesa,
+	movimento
+};

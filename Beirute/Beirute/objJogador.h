@@ -15,6 +15,7 @@ class objJogador
 		enum Direction { DOWN, LEFT, RIGHT, UP };
 		bool dano = false;
 		int tamanho[2];
+		int armadura = 0;
 		
 
 		objJogador(float new_velocidade) {
@@ -142,12 +143,15 @@ class objJogador
 				}
 				//aplica o dano uma vez
 				if (aplicar) {
-					vida--;
+					if (armadura == 0) vida--;
+					else armadura--;
 					aplicar = false;
 				}
-				printf("Vida : %d | ", vida);
-				printf("Time : %d \n", timerDano);
 			}
+		}
+
+		void incVida(int inc) {
+			if(vida > 3) vida += inc;
 		}
 };
 
