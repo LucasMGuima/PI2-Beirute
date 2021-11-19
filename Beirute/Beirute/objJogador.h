@@ -16,6 +16,7 @@ class objJogador
 		bool dano = false;
 		int tamanho[2];
 		int armadura = 0;
+		int maxVida;
 		
 
 		objJogador(float new_velocidade) {
@@ -28,6 +29,7 @@ class objJogador
 
 			vida = 3;
 			timerDano = 0;
+			maxVida = vida;
 		}
 
 		void movimento(ALLEGRO_KEYBOARD_STATE &ks, ALLEGRO_DISPLAY* tela, bloco *paredes) {

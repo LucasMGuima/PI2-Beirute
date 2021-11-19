@@ -249,6 +249,19 @@ int main()
 					powerUps[i].desenhar();
 				}
 			}
+
+			//desenha a "hud"
+			int incX = 0;
+			for (int i = 0; i < jogador.maxVida; i++) {
+				bloco temp = bloco(20 + incX, 20);
+				if (i < jogador.vida) {
+					temp.desenharCor(255, 0, 0);
+				}
+				else {
+					temp.desenharCor(0, 0, 0);
+				}
+				incX += 30;
+			}
 		}
 		else {
 			//jogador morto

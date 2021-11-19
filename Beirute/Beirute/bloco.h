@@ -21,6 +21,9 @@ struct bloco
 			al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(0, 255, 0));
 		}
 
+		void desenharCor(int r, int g, int b) {
+			al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(r, g, b));
+		}
 
 		
 
