@@ -77,6 +77,10 @@ int main()
 	//ultima fase
 	int endFase = 2;
 
+	bool msngFase = true;
+	bool inicio = true;
+	bool vitoria = true;
+
 	ALLEGRO_EVENT event;
 	ALLEGRO_KEYBOARD_STATE ks;
 
@@ -102,7 +106,7 @@ int main()
 			case ALLEGRO_EVENT_TIMER:
 				al_get_keyboard_state(&ks);
 				//checa se o jogador ainda esta vivo, conservar processamento
-				if (jogador.vida >= 0) {
+				if (jogador.vida >= 0 and !msngFase) {
 					//movimento do jogador
 					jogador.movimento(ks, tela, blocos);
 
@@ -137,6 +141,25 @@ int main()
 						}
 					}
 
+					//passa pra procima fase
+					if (al_key_down(&ks, ALLEGRO_KEY_ENTER) and !msngFase and vitoria) {
+						//checa se n é a ultima fase
+						if (fase < endFase) {
+							fase += 1;
+							msngFase = true;
+						}
+					}
+
+				}
+				else if (inicio) {
+					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+						inicio = false;
+					}
+				}
+				else if (msngFase) {
+					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+						msngFase = false;
+					}
 				}
 
 					// criar hitbox ataque
@@ -183,13 +206,6 @@ int main()
 					//recaga a faze
 					lastFase = 0;
 				}
-				//passa pra procima fase
-				if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
-					//checa se n é a ultima fase
-					if (fase < endFase) {
-						fase += 1;
-					}
-				}
 
 
 				//fecha a janela no ESC
@@ -209,62 +225,94 @@ int main()
 		//checa se o jogador ainda esta vivo
 		//se sim desenha a cena normalmente, se n apresenta a tela de morte
 		if (jogador.vida >= 0) {
-			al_clear_to_color(al_map_rgb(0, 55, 0));
-			if (al_key_down(&ks, ALLEGRO_KEY_W)) {
-				al_draw_bitmap(W, jogador.x, jogador.y, 0);
-
+			//checa se a mensagem ja passou
+			if (msngFase and !inicio) {
+				switch (fase)
+				{
+					//mesagem para aparecer no começa da fase
+					case 1:
+						al_clear_to_color(al_map_rgb(0,0,0));
+						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 1");
+						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						break;
+					case 2:
+						al_clear_to_color(al_map_rgb(0, 0, 0));
+						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 2");
+						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						break;
+				}
 			}
-			else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
-				al_draw_bitmap(D, jogador.x, jogador.y, 0);
-			}
-			else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
-				al_draw_bitmap(A, jogador.x, jogador.y, 0);
+			else if (inicio) {
+				//messagem de inicio do jogo
+				
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 202, ALLEGRO_ALIGN_CENTER, "No ano de 4097 surgiu um vírus que rapidamente contaminou 80% da população devido a sua alta capacidade de se adaptar");
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 214, ALLEGRO_ALIGN_CENTER, "e reproduzir além de ter a habilidade de se assimilar com outros  formando um super vírus,");
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 226, ALLEGRO_ALIGN_CENTER, "os 20% que não se infectaram fazem parte da elite  da humanidade que atualmente vivem fora da terra ");
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 238, ALLEGRO_ALIGN_CENTER, "para não entrarem em contato com os infectados, àqueles que continuaram desenvolveram uma tecnologia capaz de encolher");
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 250, ALLEGRO_ALIGN_CENTER, "objetos e seres vivos a nível celular podendo batalhar contra esses vírus enviando IAs medicas");
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 262, ALLEGRO_ALIGN_CENTER, "para destruirem os vírus manualmente já que os métodos comuns não funcionavam.");
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 500, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+				
 			}
 			else {
-				al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
-			}
+				al_clear_to_color(al_map_rgb(0, 55, 0));
+				if (al_key_down(&ks, ALLEGRO_KEY_W)) {
+					al_draw_bitmap(W, jogador.x, jogador.y, 0);
 
-			//desenha os blocos
-			for (int i = 0; i < size_bloc; i++) {
-				if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
-					blocos[i].desenhar();
 				}
-			}
-			if (AT) {
-				ataque.desenhar();
-			}
+				else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
+					al_draw_bitmap(D, jogador.x, jogador.y, 0);
+				}
+				else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
+					al_draw_bitmap(A, jogador.x, jogador.y, 0);
+				}
+				else {
+					al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
+				}
 
-			//desenha todos os inimigos na tela
-			for (int i = 0; i < size; i++) {
-				if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
-					if (inimigos[i].vivo) {
-						inimigos[i].desenhar();
+				//desenha os blocos
+				for (int i = 0; i < size_bloc; i++) {
+					if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
+						blocos[i].desenhar();
 					}
 				}
-			}
-
-			//desenha os powerUps
-			for (int i = 0; i < powerUp_size; i++) {
-				if (powerUps[i].existe) {
-					powerUps[i].desenhar();
+				if (AT) {
+					ataque.desenhar();
 				}
-			}
 
-			//desenha a "hud"
-			//vida
-			int incX = 0;
-			for (int i = 0; i <= jogador.vida; i++) {
-				bloco temp = bloco(20 + incX, 20);
-				temp.desenharCor(255, 0, 0);
-				incX += 30;
-			}
+				//desenha todos os inimigos na tela
+				for (int i = 0; i < size; i++) {
+					if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
+						if (inimigos[i].vivo) {
+							inimigos[i].desenhar();
+						}
+					}
+				}
 
-			//armadura
-			incX = 0;
-			for (int i = 0; i < jogador.armadura; i++) {
-				bloco temp = bloco(20 + incX, 50);
-				temp.desenharCor(0, 0, 255);
-				incX += 30;
+				//desenha os powerUps
+				for (int i = 0; i < powerUp_size; i++) {
+					if (powerUps[i].existe) {
+						powerUps[i].desenhar();
+					}
+				}
+
+				//desenha a "hud"
+				//vida
+				int incX = 0;
+				for (int i = 0; i <= jogador.vida; i++) {
+					bloco temp = bloco(20 + incX, 20);
+					temp.desenharCor(255, 0, 0);
+					incX += 30;
+				}
+
+				//armadura
+				incX = 0;
+				for (int i = 0; i < jogador.armadura; i++) {
+					bloco temp = bloco(20 + incX, 50);
+					temp.desenharCor(0, 0, 255);
+					incX += 30;
+				}
 			}
 		}
 		else {
@@ -275,7 +323,6 @@ int main()
 			al_draw_text(font24, al_map_rgb(255,255,255), 800/2, 600/2, ALLEGRO_ALIGN_CENTRE,"Você Morreu");
 			al_draw_text(font12, al_map_rgb(255, 255, 255), 800/2, 600/2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione R para continuar");
 		}
-		bool vitoria = true;
 		for (int i = 0; i < size; i++) {
 			if (inimigos[i].vivo and inimigos[i].x != -1) {
 				vitoria = false;
