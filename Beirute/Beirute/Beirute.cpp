@@ -251,15 +251,19 @@ int main()
 			}
 
 			//desenha a "hud"
+			//vida
 			int incX = 0;
-			for (int i = 0; i < jogador.maxVida; i++) {
+			for (int i = 0; i <= jogador.vida; i++) {
 				bloco temp = bloco(20 + incX, 20);
-				if (i < jogador.vida) {
-					temp.desenharCor(255, 0, 0);
-				}
-				else {
-					temp.desenharCor(0, 0, 0);
-				}
+				temp.desenharCor(255, 0, 0);
+				incX += 30;
+			}
+
+			//armadura
+			incX = 0;
+			for (int i = 0; i < jogador.armadura; i++) {
+				bloco temp = bloco(20 + incX, 50);
+				temp.desenharCor(0, 0, 255);
 				incX += 30;
 			}
 		}
