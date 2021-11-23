@@ -328,14 +328,12 @@ int main()
 		for (int i = 0; i < size; i++) {
 			if (inimigos[i].vivo and inimigos[i].x != -1) {
 				vitoria = false;
-				printf("tem um vivo \n ");
 				i = size;
 			}
 		}
 
 		if (vitoria) {
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			printf("tela de vitoria \n");
 			//mostra o texto
 			al_draw_text(font24, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2, ALLEGRO_ALIGN_CENTRE, "Você Venceu");
 			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
