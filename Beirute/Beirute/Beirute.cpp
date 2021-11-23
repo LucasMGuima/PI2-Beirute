@@ -146,15 +146,15 @@ int main()
 							ataque.y = jogador.y - 45;
 						}
 						if (al_key_down(&ks, ALLEGRO_KEY_S)) {
-							ataque.x = jogador.x + 9,5;
-							ataque.y = jogador.y + 35;
+							ataque.x = jogador.x + 9.5;
+							ataque.y = jogador.y + 45;
 						}
 						if (al_key_down(&ks, ALLEGRO_KEY_A)) {
-							ataque.x = jogador.x - 25;
+							ataque.x = jogador.x - 35;
 							ataque.y = jogador.y + 25;
 						}
 						if (al_key_down(&ks, ALLEGRO_KEY_D)) {
-							ataque.x = jogador.x + 15;
+							ataque.x = jogador.x + 25;
 							ataque.y = jogador.y + 25;
 						}
 
