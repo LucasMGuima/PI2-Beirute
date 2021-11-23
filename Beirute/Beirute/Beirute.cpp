@@ -128,18 +128,18 @@ int main()
 					if (al_key_down(&ks, ALLEGRO_KEY_SPACE)) {
 						if (al_key_down(&ks, ALLEGRO_KEY_W)) {
 							ataque.x = jogador.x + 10;
-							ataque.y = jogador.y - 25;
+							ataque.y = jogador.y - 45;
 						}
 						if (al_key_down(&ks, ALLEGRO_KEY_S)) {
-							ataque.x = jogador.x + 10;
-							ataque.y = jogador.y + 60;
+							ataque.x = jogador.x + 9,5;
+							ataque.y = jogador.y + 35;
 						}
 						if (al_key_down(&ks, ALLEGRO_KEY_A)) {
 							ataque.x = jogador.x - 25;
 							ataque.y = jogador.y + 25;
 						}
 						if (al_key_down(&ks, ALLEGRO_KEY_D)) {
-							ataque.x = jogador.x + 45;
+							ataque.x = jogador.x + 15;
 							ataque.y = jogador.y + 25;
 						}
 
@@ -217,7 +217,7 @@ int main()
 				}
 			}
 			if (AT) {
-				ataque.desenhar();
+				ataque.desenharA();
 			}
 
 			//desenha todos os inimigos na tela
