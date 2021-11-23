@@ -18,7 +18,7 @@ public:
 	}
 
 	void desenhar() {
-		al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(0, 255, 0));
+		al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(255, 192, 203));
 	}
 
 	void desenharCor(int r, int g, int b) {
