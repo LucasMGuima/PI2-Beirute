@@ -15,6 +15,8 @@ class objInimigo {
 		int passo_atual = 0;
 		int mov_dist = 0;
 
+		ALLEGRO_BITMAP* img;
+
 		int last_pos[2] = {-1, -1};
 	public:
 		double x, y, velocida;
@@ -41,6 +43,17 @@ class objInimigo {
 					mov_passo[1] = 2;
 					mov_passo[2] = 3;
 					mov_passo[3] = 4;
+					break;
+			}
+
+			//img do inimigo
+			switch (new_tipoCaminho)
+			{
+				case esqDir:
+					img = al_load_bitmap("imgs/inimigos/Green_Virus.png");
+					break;
+				case cimaBaixo:
+					img = al_load_bitmap("imgs/inimigos/Blue_Virus.png");
 					break;
 			}
 		}
@@ -292,8 +305,8 @@ class objInimigo {
 
 		}
 
-		void desenhar(int r, int g, int b) {
+		void desenhar() {
 			//se redesenha na tela com base na nova posição
-			al_draw_filled_rectangle(x, y, x + TEMP_TAMANHO, y + TEMP_TAMANHO, al_map_rgb(r, g, b));
+			al_draw_bitmap(this->img, this->x, this->y, 0);
 		}
 };

@@ -15,6 +15,8 @@ class objJogador
 		enum Direction { DOWN, LEFT, RIGHT, UP };
 		bool dano = false;
 		int tamanho[2];
+		int armadura = 0;
+		int maxVida;
 		
 
 		objJogador(float new_velocidade) {
@@ -27,6 +29,7 @@ class objJogador
 
 			vida = 3;
 			timerDano = 0;
+			maxVida = vida;
 		}
 
 		void movimento(ALLEGRO_KEYBOARD_STATE &ks, ALLEGRO_DISPLAY* tela, bloco *paredes) {
@@ -142,12 +145,15 @@ class objJogador
 				}
 				//aplica o dano uma vez
 				if (aplicar) {
-					vida--;
+					if (armadura == 0) vida--;
+					else armadura--;
 					aplicar = false;
 				}
-				printf("Vida : %d | ", vida);
-				printf("Time : %d \n", timerDano);
 			}
+		}
+
+		void incVida(int inc) {
+			if(vida > 3) vida += inc;
 		}
 };
 

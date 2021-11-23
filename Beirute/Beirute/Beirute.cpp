@@ -6,10 +6,12 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <string>
 
 #include "objJogador.h"
 #include "objInimigo.h"
 #include "bloco.h"
+#include "powerUp.h"
 
 #include "FazeMaker.h"
 
@@ -54,13 +56,12 @@ int main()
 	D = al_load_bitmap("medico_dir_andar_1.png");
 	objJogador jogador(4.0);
 
-	ALLEGRO_EVENT event;
-
 	bool done = false;
 	bool AT = false;
 
 	FazeMaker fazeMaker;
 
+	powerUp powerUps[10];
 	objInimigo inimigos[999];
 	bloco blocos[999];
 	bloco ataque(0, 0);
@@ -68,6 +69,7 @@ int main()
 	//tamanho dos arrays
 	int size = (sizeof inimigos) / (sizeof *inimigos);
 	int size_bloc = (sizeof blocos) / (sizeof *blocos);
+	int powerUp_size = (sizeof powerUps) / (sizeof *powerUps);
 
 	//fase atual
 	int fase = 1;
@@ -75,7 +77,7 @@ int main()
 	//ultima fase
 	int endFase = 2;
 
-	ALLEGRO_EVENT evento;
+	ALLEGRO_EVENT event;
 	ALLEGRO_KEYBOARD_STATE ks;
 
 	al_start_timer(timer);
@@ -88,12 +90,15 @@ int main()
 			fazeMaker.criarInimigos(fase, inimigos);
 			//posiciona o jogador
 			fazeMaker.posicionarJogador(fase, &jogador);
+			//cria o(s) power ups
+			fazeMaker.criarPowerUp(fase, powerUps);
 
 			lastFase = fase;
 		}
-		al_wait_for_event(queue, &evento);
+		
+		al_wait_for_event(queue, &event);
 
-		switch (evento.type) {
+		switch (event.type) {
 			case ALLEGRO_EVENT_TIMER:
 				al_get_keyboard_state(&ks);
 				//checa se o jogador ainda esta vivo, conservar processamento
@@ -122,6 +127,16 @@ int main()
 						}
 					}
 
+					//corre pelo array dos powerUps
+					for (int i = 0; i < powerUp_size; i++) {
+						if (powerUps[i].existe) {
+							//checa por colisao com o jogador
+							if (powerUps[i].colisaoVar(jogador.tamanho[0], jogador.tamanho[1], jogador.x, jogador.y)) {
+								powerUps[i].efeito(&jogador);
+							}
+						}
+					}
+
 				}
 
 					// criar hitbox ataque
@@ -145,7 +160,6 @@ int main()
 
 						
 						AT = true;//determina o desaparecimento dosn inimigos
-						//al_draw_rectangle(jogador.x + 50, jogador.y + 65, jogador.x - 10, jogador.y - 10, al_map_rgb(255, 0, 0), 1.0);
 					}
 					// checa colisao do inimigo com o hitbox
 					if (AT) {
@@ -224,12 +238,33 @@ int main()
 			for (int i = 0; i < size; i++) {
 				if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
 					if (inimigos[i].vivo) {
-						int r = rand() % 255;
-						int g = rand() % 255;
-						int b = rand() % 255;
-						inimigos[i].desenhar(r, g, b);
+						inimigos[i].desenhar();
 					}
 				}
+			}
+
+			//desenha os powerUps
+			for (int i = 0; i < powerUp_size; i++) {
+				if (powerUps[i].existe) {
+					powerUps[i].desenhar();
+				}
+			}
+
+			//desenha a "hud"
+			//vida
+			int incX = 0;
+			for (int i = 0; i <= jogador.vida; i++) {
+				bloco temp = bloco(20 + incX, 20);
+				temp.desenharCor(255, 0, 0);
+				incX += 30;
+			}
+
+			//armadura
+			incX = 0;
+			for (int i = 0; i < jogador.armadura; i++) {
+				bloco temp = bloco(20 + incX, 50);
+				temp.desenharCor(0, 0, 255);
+				incX += 30;
 			}
 		}
 		else {
