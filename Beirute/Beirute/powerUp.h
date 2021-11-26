@@ -62,7 +62,7 @@ class powerUp {
 			switch (tipo)
 			{
 				case vida:
-					jogador->incVida(1);
+					jogador->vida += 1;
 					break;
 				case defesa:
 					jogador->armadura += 1;
