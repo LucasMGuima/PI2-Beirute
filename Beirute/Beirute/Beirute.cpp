@@ -141,24 +141,16 @@ int main()
 						}
 					}
 
-					//passa pra procima fase
-					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
-						if (fase < endFase) {
-							fase += 1;
-							msngFase = true;
-						}
-					}
+					
 
 				}
 				else if (inicio) {
 					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
 						inicio = false;
 					}
-				}
-				else if (msngFase) {
-					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
-						msngFase = false;
-					}
+
+				}else if (al_key_down(&ks, ALLEGRO_KEY_ENTER) and msngFase) {
+					msngFase = false;
 				}
 
 					// criar hitbox ataque
@@ -200,7 +192,7 @@ int main()
 				}
 
 				//reseta a fase se morto
-				if (al_key_down(&ks, ALLEGRO_KEY_R)) {
+				if (al_key_down(&ks, ALLEGRO_KEY_R) and jogador.vida <= 0) {
 					jogador.vida = 3;
 					//recaga a faze
 					lastFase = 0;
@@ -332,6 +324,15 @@ int main()
 			//mostra o texto
 			al_draw_text(font24, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2, ALLEGRO_ALIGN_CENTRE, "Você Venceu");
 			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
+
+			//passa pra proxima fase
+			al_get_keyboard_state(&ks);
+			if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+				if (fase < endFase) {
+					fase += 1;
+					msngFase = true;
+				}
+			}
 		}
 		AT = false;
 		al_flip_display();
