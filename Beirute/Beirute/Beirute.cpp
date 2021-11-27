@@ -37,6 +37,7 @@ int main()
 
 	//fontes
 	ALLEGRO_FONT* font24 = al_load_font("fonts/arial.ttf", 24, 0);
+	ALLEGRO_FONT* font18 = al_load_font("fonts/arial.ttf", 18, 0);
 	ALLEGRO_FONT* font12 = al_load_font("fonts/arial.ttf", 12, 0);
 
 
@@ -141,8 +142,7 @@ int main()
 					}
 
 					//passa pra procima fase
-					if (al_key_down(&ks, ALLEGRO_KEY_ENTER) and !msngFase) {
-						//checa se n é a ultima fase
+					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
 						if (fase < endFase) {
 							fase += 1;
 							msngFase = true;
@@ -245,12 +245,7 @@ int main()
 				//messagem de inicio do jogo
 				
 				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 202, ALLEGRO_ALIGN_CENTER, "No ano de 4097 surgiu um vírus que rapidamente contaminou 80% da população devido a sua alta capacidade de se adaptar");
-				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 214, ALLEGRO_ALIGN_CENTER, "e reproduzir além de ter a habilidade de se assimilar com outros  formando um super vírus,");
-				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 226, ALLEGRO_ALIGN_CENTER, "os 20% que não se infectaram fazem parte da elite  da humanidade que atualmente vivem fora da terra ");
-				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 238, ALLEGRO_ALIGN_CENTER, "para não entrarem em contato com os infectados, àqueles que continuaram desenvolveram uma tecnologia capaz de encolher");
-				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 250, ALLEGRO_ALIGN_CENTER, "objetos e seres vivos a nível celular podendo batalhar contra esses vírus enviando IAs medicas");
-				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 262, ALLEGRO_ALIGN_CENTER, "para destruirem os vírus manualmente já que os métodos comuns não funcionavam.");
+				al_draw_multiline_text(font18, al_map_rgb(255, 255, 255), 400, 200, 700, 20, ALLEGRO_ALIGN_CENTER, "No ano de 4097 surgiu um vírus que rapidamente contaminou 65% da população devido a sua alta capacidade de se adaptar e reproduzir além de ter a habilidade de se assimilar com outros  formando um super vírus, os 35% que não se infectaram são os mais ricos da humanidade que atualmente vivem fora da terra e são chamados de moradores de cima, para não entrarem em contato com os infectados, àqueles que continuaram desenvolveram uma tecnologia capaz de encolher objetos e seres vivos a nível celular podendo batalhar contra esses vírus enviando Medicos  para aplicar os remédios e vacinas diretamente nos vírus dentro das células, seu objetivo e mostrar a eficácia desse novo método e provar a todos a real importância da ciência e das vacinas provando com resultados aos moradores de cima que se recusaram a acreditar nos tratamentos e partiram para fora da terra.");
 				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 500, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
 				
 			}
