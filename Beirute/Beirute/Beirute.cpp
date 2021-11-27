@@ -140,16 +140,12 @@ int main()
 							}
 						}
 					}
-
-					
-
 				}
 				else if (inicio) {
 					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
 						inicio = false;
 					}
-
-				}else if (al_key_down(&ks, ALLEGRO_KEY_ENTER) and msngFase) {
+				}else if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
 					msngFase = false;
 				}
 
@@ -302,12 +298,11 @@ int main()
 			}
 		}
 		else {
-			//jogador morto
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-
 			//mostra o texto
-			al_draw_text(font24, al_map_rgb(255,255,255), 800/2, 600/2, ALLEGRO_ALIGN_CENTRE,"Você Morreu");
-			al_draw_text(font12, al_map_rgb(255, 255, 255), 800/2, 600/2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione R para continuar");
+			al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTRE, "Você Morreu");
+			al_draw_multiline_text(font18, al_map_rgb(255, 255, 255), 400, 300, 700, 20, ALLEGRO_ALIGN_CENTER, "Voce falhou em mostrar a todos o real poder da ciência tente novamente nós não podemos deixar o negacionismo vencer mais uma vez.");
+			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 500, ALLEGRO_ALIGN_CENTRE, "Precione R para continuar");
 		}
 
 
@@ -322,8 +317,11 @@ int main()
 		if (vitoria) {
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//mostra o texto
-			al_draw_text(font24, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2, ALLEGRO_ALIGN_CENTRE, "Você Venceu");
-			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
+			al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTRE, "Você Venceu");
+			//porcentangem dos virus
+			int porcVir = fase * 20;
+			al_draw_multiline_textf(font18, al_map_rgb(255, 255, 255), 400, 300, 700, 20, ALLEGRO_ALIGN_CENTER, "Parabéns ótimo trabalho %d por cento dos virus foram exterminados graças ao poder da ciência e das vacinas, os moradores de cima vão ter que aceitar a ciência graças a você.", porcVir);
+			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 500, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
 
 			//passa pra proxima fase
 			al_get_keyboard_state(&ks);
