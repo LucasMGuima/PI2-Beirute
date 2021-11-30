@@ -37,6 +37,7 @@ int main()
 
 	//fontes
 	ALLEGRO_FONT* font24 = al_load_font("fonts/arial.ttf", 24, 0);
+	ALLEGRO_FONT* font18 = al_load_font("fonts/arial.ttf", 18, 0);
 	ALLEGRO_FONT* font12 = al_load_font("fonts/arial.ttf", 12, 0);
 
 
@@ -77,6 +78,9 @@ int main()
 	//ultima fase
 	int endFase = 2;
 
+	bool msngFase = true;
+	bool inicio = true;
+
 	ALLEGRO_EVENT event;
 	ALLEGRO_KEYBOARD_STATE ks;
 
@@ -102,7 +106,7 @@ int main()
 			case ALLEGRO_EVENT_TIMER:
 				al_get_keyboard_state(&ks);
 				//checa se o jogador ainda esta vivo, conservar processamento
-				if (jogador.vida >= 0) {
+				if (jogador.vida >= 0 and !msngFase) {
 					//movimento do jogador
 					jogador.movimento(ks, tela, blocos);
 
@@ -136,7 +140,13 @@ int main()
 							}
 						}
 					}
-
+				}
+				else if (inicio) {
+					if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+						inicio = false;
+					}
+				}else if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+					msngFase = false;
 				}
 
 					// criar hitbox ataque
@@ -178,17 +188,10 @@ int main()
 				}
 
 				//reseta a fase se morto
-				if (al_key_down(&ks, ALLEGRO_KEY_R)) {
+				if (al_key_down(&ks, ALLEGRO_KEY_R) and jogador.vida <= 0) {
 					jogador.vida = 3;
 					//recaga a faze
 					lastFase = 0;
-				}
-				//passa pra procima fase
-				if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
-					//checa se n é a ultima fase
-					if (fase < endFase) {
-						fase += 1;
-					}
 				}
 
 
@@ -215,6 +218,58 @@ int main()
 
 			}
 			else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
+
+			//checa se a mensagem ja passou
+			if (msngFase and !inicio) {
+				switch (fase)
+				{
+					//mesagem para aparecer no começa da fase
+					case 1:
+						al_clear_to_color(al_map_rgb(0,0,0));
+						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 1");
+						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						break;
+					case 2:
+						al_clear_to_color(al_map_rgb(0, 0, 0));
+						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 2");
+						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						break;
+					case 3:
+						al_clear_to_color(al_map_rgb(0, 0, 0));
+						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 3");
+						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						break;
+					case 4:
+						al_clear_to_color(al_map_rgb(0, 0, 0));
+						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 4");
+						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						break;
+					case 5:
+						al_clear_to_color(al_map_rgb(0, 0, 0));
+						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 5");
+						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						break;
+				}
+			}
+			else if (inicio) {
+				//messagem de inicio do jogo
+				
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_draw_multiline_text(font18, al_map_rgb(255, 255, 255), 400, 200, 700, 20, ALLEGRO_ALIGN_CENTER, "No ano de 4097 surgiu um vírus que rapidamente contaminou 65% da população devido a sua alta capacidade de se adaptar e reproduzir além de ter a habilidade de se assimilar com outros  formando um super vírus, os 35% que não se infectaram são os mais ricos da humanidade que atualmente vivem fora da terra e são chamados de moradores de cima, para não entrarem em contato com os infectados, àqueles que continuaram desenvolveram uma tecnologia capaz de encolher objetos e seres vivos a nível celular podendo batalhar contra esses vírus enviando Medicos  para aplicar os remédios e vacinas diretamente nos vírus dentro das células, seu objetivo e mostrar a eficácia desse novo método e provar a todos a real importância da ciência e das vacinas provando com resultados aos moradores de cima que se recusaram a acreditar nos tratamentos e partiram para fora da terra.");
+				al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 500, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+				
+			}
+			else {
+				al_clear_to_color(al_map_rgb(0, 55, 0));
+				if (al_key_down(&ks, ALLEGRO_KEY_W)) {
+					al_draw_bitmap(W, jogador.x, jogador.y, 0);
+
+				}
+			}
+			if (AT) {
+				ataque.desenharA();
+			}
+			else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
 				al_draw_bitmap(D, jogador.x, jogador.y, 0);
 			}
 			else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
@@ -224,57 +279,59 @@ int main()
 				al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
 			}
 
-			//desenha os blocos
-			for (int i = 0; i < size_bloc; i++) {
-				if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
-					blocos[i].desenhar();
-				}
-			}
-			if (AT) {
-				ataque.desenharA();
-			}
-
-			//desenha todos os inimigos na tela
-			for (int i = 0; i < size; i++) {
-				if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
-					if (inimigos[i].vivo) {
-						inimigos[i].desenhar();
+				//desenha os blocos
+				for (int i = 0; i < size_bloc; i++) {
+					if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
+						blocos[i].desenhar();
 					}
 				}
-			}
-
-			//desenha os powerUps
-			for (int i = 0; i < powerUp_size; i++) {
-				if (powerUps[i].existe) {
-					powerUps[i].desenhar();
+				if (AT) {
+					ataque.desenhar();
 				}
-			}
 
-			//desenha a "hud"
-			//vida
-			int incX = 0;
-			for (int i = 0; i <= jogador.vida; i++) {
-				bloco temp = bloco(20 + incX, 20);
-				temp.desenharCor(255, 0, 0);
-				incX += 30;
-			}
+				//desenha todos os inimigos na tela
+				for (int i = 0; i < size; i++) {
+					if (!(inimigos[i].x == -1 and inimigos[i].y == -1)) {
+						if (inimigos[i].vivo) {
+							inimigos[i].desenhar();
+						}
+					}
+				}
 
-			//armadura
-			incX = 0;
-			for (int i = 0; i < jogador.armadura; i++) {
-				bloco temp = bloco(20 + incX, 50);
-				temp.desenharCor(0, 0, 255);
-				incX += 30;
+				//desenha os powerUps
+				for (int i = 0; i < powerUp_size; i++) {
+					if (powerUps[i].existe) {
+						powerUps[i].desenhar();
+					}
+				}
+
+				//desenha a "hud"
+				//vida
+				int incX = 0;
+				for (int i = 0; i <= jogador.vida; i++) {
+					bloco temp = bloco(20 + incX, 20);
+					temp.desenharCor(255, 0, 0);
+					incX += 30;
+				}
+
+				//armadura
+				incX = 0;
+				for (int i = 0; i < jogador.armadura; i++) {
+					bloco temp = bloco(20 + incX, 50);
+					temp.desenharCor(0, 0, 255);
+					incX += 30;
+				}
 			}
 		}
 		else {
-			//jogador morto
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-
 			//mostra o texto
-			al_draw_text(font24, al_map_rgb(255,255,255), 800/2, 600/2, ALLEGRO_ALIGN_CENTRE,"Você Morreu");
-			al_draw_text(font12, al_map_rgb(255, 255, 255), 800/2, 600/2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione R para continuar");
+			al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTRE, "Você Morreu");
+			al_draw_multiline_text(font18, al_map_rgb(255, 255, 255), 400, 300, 700, 20, ALLEGRO_ALIGN_CENTER, "Voce falhou em mostrar a todos o real poder da ciência tente novamente nós não podemos deixar o negacionismo vencer mais uma vez.");
+			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 500, ALLEGRO_ALIGN_CENTRE, "Precione R para continuar");
 		}
+
+
 		bool vitoria = true;
 		for (int i = 0; i < size; i++) {
 			if (inimigos[i].vivo and inimigos[i].x != -1) {
@@ -282,12 +339,24 @@ int main()
 				i = size;
 			}
 		}
+
 		if (vitoria) {
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-
 			//mostra o texto
-			al_draw_text(font24, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2, ALLEGRO_ALIGN_CENTRE, "Você Venceu");
-			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 600 / 2 + 24, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
+			al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTRE, "Você Venceu");
+			//porcentangem dos virus
+			int porcVir = fase * 20;
+			al_draw_multiline_textf(font18, al_map_rgb(255, 255, 255), 400, 300, 700, 20, ALLEGRO_ALIGN_CENTER, "Parabéns ótimo trabalho %d por cento dos virus foram exterminados graças ao poder da ciência e das vacinas, os moradores de cima vão ter que aceitar a ciência graças a você.", porcVir);
+			al_draw_text(font12, al_map_rgb(255, 255, 255), 800 / 2, 500, ALLEGRO_ALIGN_CENTRE, "Precione ENTER para continuar");
+
+			//passa pra proxima fase
+			al_get_keyboard_state(&ks);
+			if (al_key_down(&ks, ALLEGRO_KEY_ENTER)) {
+				if (fase < endFase) {
+					fase += 1;
+					msngFase = true;
+				}
+			}
 		}
 		AT = false;
 		al_flip_display();
