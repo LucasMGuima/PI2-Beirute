@@ -212,13 +212,6 @@ int main()
 		//checa se o jogador ainda esta vivo
 		//se sim desenha a cena normalmente, se n apresenta a tela de morte
 		if (jogador.vida >= 0) {
-			al_clear_to_color(al_map_rgb(100, 0, 0));
-			if (al_key_down(&ks, ALLEGRO_KEY_W)) {
-				al_draw_bitmap(W, jogador.x, jogador.y, 0);
-
-			}
-			else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
-
 			//checa se a mensagem ja passou
 			if (msngFase and !inicio) {
 				switch (fase)
@@ -253,33 +246,27 @@ int main()
 				
 			}
 			else {
-				al_clear_to_color(al_map_rgb(0, 55, 0));
+				al_clear_to_color(al_map_rgb(100, 0, 0));
 				if (al_key_down(&ks, ALLEGRO_KEY_W)) {
 					al_draw_bitmap(W, jogador.x, jogador.y, 0);
-
 				}
-			}
-			if (AT) {
-				ataque.desenharA();
-			}
-			else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
-				al_draw_bitmap(D, jogador.x, jogador.y, 0);
-			}
-			else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
-				al_draw_bitmap(A, jogador.x, jogador.y, 0);
-			}
-			else {
-				al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
-			}
-
+				else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
+					al_draw_bitmap(D, jogador.x, jogador.y, 0);
+				}
+				else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
+					al_draw_bitmap(A, jogador.x, jogador.y, 0);
+				}
+				else {
+					al_draw_bitmap(IMG, jogador.x, jogador.y, 0);
+				}
+				if (AT) {
+					ataque.desenharA();
+				}
 				//desenha os blocos
 				for (int i = 0; i < size_bloc; i++) {
 					if (!(blocos[i].x == -1 and blocos[i].y == -1)) {
 						blocos[i].desenhar();
 					}
-				}
-				if (AT) {
-					ataque.desenhar();
 				}
 
 				//desenha todos os inimigos na tela
@@ -315,8 +302,7 @@ int main()
 					incX += 30;
 				}
 			}
-		}
-		else {
+		}else {
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//mostra o texto
 			al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTRE, "Você Morreu");
