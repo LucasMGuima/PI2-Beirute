@@ -209,7 +209,7 @@ int main()
 		//checa se o jogador ainda esta vivo
 		//se sim desenha a cena normalmente, se n apresenta a tela de morte
 		if (jogador.vida >= 0) {
-			al_clear_to_color(al_map_rgb(0, 55, 0));
+			al_clear_to_color(al_map_rgb(100, 0, 0));
 			if (al_key_down(&ks, ALLEGRO_KEY_W)) {
 				al_draw_bitmap(W, jogador.x, jogador.y, 0);
 
