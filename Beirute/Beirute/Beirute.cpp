@@ -76,7 +76,7 @@ int main()
 	int fase = 1;
 	int lastFase = 0;
 	//ultima fase
-	int endFase = 2;
+	int endFase = 3;
 
 	bool msngFase = true;
 	bool inicio = true;
@@ -228,26 +228,19 @@ int main()
 						al_clear_to_color(al_map_rgb(0,0,0));
 						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 1");
 						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						al_draw_multiline_text(font18, al_map_rgb(255, 255, 255), 400, 300, 700, 20, ALLEGRO_ALIGN_CENTER, "Aproximadamente 4 pessoas por minuto são salvas devido à seus esforços, mantenha o ótimo trabalho o pesadelo que vivemos logo ira acabar.");
 						break;
 					case 2:
 						al_clear_to_color(al_map_rgb(0, 0, 0));
 						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 2");
 						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						al_draw_multiline_text(font18, al_map_rgb(255, 255, 255), 400, 300, 700, 20, ALLEGRO_ALIGN_CENTER, "Até agora 96% dos mortos fazem parte dos grupos negacionista que seguem a ideologia dos moradores de cima com essas informações podemos convencer a todos a se juntarem a nós.");
 						break;
 					case 3:
 						al_clear_to_color(al_map_rgb(0, 0, 0));
 						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 3");
 						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
-						break;
-					case 4:
-						al_clear_to_color(al_map_rgb(0, 0, 0));
-						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 4");
-						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
-						break;
-					case 5:
-						al_clear_to_color(al_map_rgb(0, 0, 0));
-						al_draw_text(font24, al_map_rgb(255, 255, 255), 400, 100, ALLEGRO_ALIGN_CENTER, "Fase 5");
-						al_draw_text(font12, al_map_rgb(255, 255, 255), 400, 200, ALLEGRO_ALIGN_CENTER, "Aperte ENTER para começar");
+						al_draw_multiline_text(font18, al_map_rgb(255, 255, 255), 400, 300, 700, 20, ALLEGRO_ALIGN_CENTER, "Parabéns ótimo trabalho o virus está sendo exterminado graças ao poder da ciência e das vacinas os moradores de cima ainda vão acreditar em nós.");
 						break;
 				}
 			}
