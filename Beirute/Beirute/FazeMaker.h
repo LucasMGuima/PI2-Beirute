@@ -175,6 +175,10 @@ public:
 			levelStg = "levels/lv02.txt";
 			printf("Achou o lv02 \n");
 			break;
+		case 3:
+			levelStg = "levels/lv03.txt";
+			printf("Achou o lv03 \n");
+			break;
 		}
 
 		return levelStg;
