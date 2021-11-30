@@ -9,7 +9,7 @@ struct bloco
 {
 public:
 	float x, y;
-
+	int s = 0;
 	bloco() { x = -1.0; y = -1.0; };
 
 	bloco(int x, int y) {
@@ -18,9 +18,8 @@ public:
 	}
 
 	void desenhar() {
-		al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(0, 255, 0));
+		al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(55, 55,55));
 	}
-
 	void desenharCor(int r, int g, int b) {
 		al_draw_filled_rectangle(x, y, x + 20, y + 20, al_map_rgb(r, g, b));
 	}
@@ -35,17 +34,18 @@ public:
 		W = al_load_bitmap("seringa_cima.png");
 		D = al_load_bitmap("seringa_dir.png");
 
-		if (al_key_down(&ks, ALLEGRO_KEY_W)) {
+		
+		 if (al_key_down(&ks, ALLEGRO_KEY_W) && !al_key_down(&ks, ALLEGRO_KEY_D) && !al_key_down(&ks, ALLEGRO_KEY_A) && !al_key_down(&ks, ALLEGRO_KEY_S)) {
 			al_draw_bitmap(W, x, y, 0);
 
 		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_D)) {
+		if (al_key_down(&ks, ALLEGRO_KEY_D) && !al_key_down(&ks, ALLEGRO_KEY_W) && !al_key_down(&ks, ALLEGRO_KEY_A) && !al_key_down(&ks, ALLEGRO_KEY_S)) {
 			al_draw_bitmap(D, x, y, 0);
 		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_A)) {
+		if (al_key_down(&ks, ALLEGRO_KEY_A) && !al_key_down(&ks, ALLEGRO_KEY_D) && !al_key_down(&ks, ALLEGRO_KEY_W) && !al_key_down(&ks, ALLEGRO_KEY_S)) {
 			al_draw_bitmap(A, x, y, 0);
 		}
-		else if (al_key_down(&ks, ALLEGRO_KEY_S)) {
+		if (al_key_down(&ks, ALLEGRO_KEY_S) && !al_key_down(&ks, ALLEGRO_KEY_D) && !al_key_down(&ks, ALLEGRO_KEY_A) && !al_key_down(&ks, ALLEGRO_KEY_W)) {
 			al_draw_bitmap(S, x, y, 0);
 		}
 
